@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "23210719245",
+    "project_id": "luxury-hotel-7c64b",
+    "storage_bucket": "luxury-hotel-7c64b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23210719245:android:7af54a213dd597a4397d44",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "23210719245-sebmfkd6tv2bq3knrbeminvmkqf8q05n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkuuvGvLzmGU-o9pMRKxbNzTCrRMxbx4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "23210719245-49t2cgl4t651fv45okkmrbm2cb3rk2un.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
