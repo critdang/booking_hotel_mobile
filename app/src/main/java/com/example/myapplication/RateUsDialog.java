@@ -7,6 +7,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
@@ -33,7 +34,7 @@ public class RateUsDialog extends Dialog {
         rateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //>>>>
+                Rating();
             }
         });
         laterBtn.setOnClickListener(new View.OnClickListener() {
@@ -71,5 +72,10 @@ public class RateUsDialog extends Dialog {
         scaleAnimation.setFillAfter(true);
         scaleAnimation.setDuration(200);
         ratingImage.startAnimation(scaleAnimation);
+    }
+
+    public void Rating(){
+        Log.i("Rate", "Rating button clicked");
+
     }
 }
