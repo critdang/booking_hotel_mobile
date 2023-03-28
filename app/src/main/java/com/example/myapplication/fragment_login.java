@@ -132,7 +132,7 @@ public class fragment_login extends Fragment {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                Intent intent = new Intent(getActivity(), RateUsDialog.class);
+                                Intent intent = new Intent(getActivity(), MainActivity2.class);
                                 startActivity(intent);
                             }
                         } catch (JSONException e) {
