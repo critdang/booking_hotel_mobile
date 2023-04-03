@@ -9,7 +9,7 @@ public class Profile implements Serializable {
     private String phone;
     private String address;
     private String gender;
-
+    private String accessToken;
     public String getAvatar() {
         return avatar;
     }
@@ -67,25 +67,17 @@ public class Profile implements Serializable {
         this.gender = gender;
     }
 
-    public Profile(int id, String name, String email, String phone, String address, String gender, String avatar) {
+    public Profile(int id, String name, String email, String phone, String address, String gender, String accessToken, String avatar) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.address = address;
         this.gender = gender;
+        this.accessToken = accessToken;
         this.avatar = avatar;
     }
     public Profile() {
-    }
-    public void setProfile(int id, String name, String email, String phone, String address, String gender, String avatar){
-        this.setId(id);
-        this.setName(name);
-        this.setEmail(email);
-        this.setPhone(phone);
-        this.setAddress(address);
-        this.setGender(gender);
-        this.setAvatar(avatar);
     }
 
     @Override
@@ -98,6 +90,15 @@ public class Profile implements Serializable {
                 ", address='" + address + '\'' +
                 ", gender='" + gender + '\'' +
                 ", avatar='" + avatar + '\'' +
+                ", accessToken='" + accessToken + '\'' +
                 '}';
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }
