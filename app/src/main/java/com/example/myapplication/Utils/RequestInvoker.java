@@ -20,6 +20,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.myapplication.MainFunctionsActivity;
 import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.Service;
+import com.example.myapplication.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,7 +40,7 @@ import java.util.Map;
 public class RequestInvoker {
 
     public static void renderService(Context context, VolleyCallback<Service> callback) {
-        String url = "http://10.0.2.2:8080/service";
+        String url = context.getString(R.string.server_host_address)+"/service";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -96,7 +97,7 @@ public class RequestInvoker {
     }
 
     public static void loginUser(Context context, String email, String password, VolleyCallback<Profile> callback) {
-        String url = "http://10.0.2.2:8080/user/login"; // replace with your API URL
+        String url = context.getString(R.string.server_host_address)+"/user/login"; // replace with your API URL
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override

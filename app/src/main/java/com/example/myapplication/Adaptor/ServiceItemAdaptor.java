@@ -70,42 +70,13 @@ public class ServiceItemAdaptor extends ArrayAdapter<Service> {
         serviceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendRequest();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference("request");
+                Log.i("Request", myRef.getKey());
                 myRef.setValue(content.getName());
             }
         });
         return cellView;
-    }
-    private void sendRequest() {
-//        String url = "http://10.0.2.2:8080/user/1";
-        String url = "http://10.0.2.2:8080/category?name=ASC";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    String status = response.getString("success");
-                    String[] message = response.getJSONArray("message").toString().split(",");
-                    String strmessage = "";
-                    for (int i = 0; i < message.length; i++) {
-                        strmessage += message[i] + "";
-                    }
-                    Log.i("Response", status + " " + strmessage);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
-                System.err.println(error);
-            }
-        });
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this.context);
-        requestQueue.add(jsonObjectRequest);
     }
     private void loadImageFromURL(String url, ImageView avatarImageView) {
 
