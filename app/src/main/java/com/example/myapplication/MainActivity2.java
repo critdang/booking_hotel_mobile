@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -38,7 +39,6 @@ public class MainActivity2 extends AppCompatActivity {
         //dialogFragment.show(getSupportFragmentManager(), "rate_us_dialog");
 
 //      [ALARM] Show the rate_us_dialog fragment as a dialog
-        setAlarm();
       showRateUsDialog(); //test method showRateUsDialog
 
         String filename = "userInfo.txt";
@@ -71,13 +71,12 @@ public class MainActivity2 extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             msg = "Failed";
                         }
-
                     }
                 });
 
     }
     public void showRateUsDialog() {
-        Log.d("MainActivity2", "showRateUsDialog() called");
+        Log.d("MainActivity2", "showRateUsDialog() called at"+ new Date());
         FragmentManager fm = getSupportFragmentManager();
         fragment_rate_us_dialog dialog = new fragment_rate_us_dialog();
         dialog.show(fm, "rate_us_dialog");
@@ -94,22 +93,22 @@ public class MainActivity2 extends AppCompatActivity {
 
 //      [STAR- TEST MODE] Set the alarm with the repeating alarm for 10 seconds after the device boots up
         Log.d("MainActivity2", "setAlarm() called");
-        long startTime = System.currentTimeMillis() + 5000; // start in 10 seconds
-        long interval = 5000; // repeat every 10 seconds
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, interval, pendingIntent);
+//        long startTime = System.currentTimeMillis() + 100000; // start in 10 seconds (5000)
+//        long interval = 5000; // repeat every 10 seconds
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, interval, pendingIntent);
 //      [END- TEST MODE] Set the alarm with the repeating alarm for 10 seconds after the device boots up
 
 //      [STAR] Set the alarm to trigger at 9 o'clock every day
         //Set the alarm to start at 9:00 AM
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTimeInMillis(System.currentTimeMillis());
-//        calendar.set(Calendar.HOUR_OF_DAY, 9);
-//        calendar.set(Calendar.MINUTE, 0);
-//        calendar.set(Calendar.SECOND, 0);
-//        long startTime = calendar.getTimeInMillis();
-//        // Repeat the alarm every day
-//        long interval = AlarmManager.INTERVAL_DAY;
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, interval, pendingIntent);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 9);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        long startTime = calendar.getTimeInMillis();
+        // Repeat the alarm every day
+        long interval = AlarmManager.INTERVAL_DAY;
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, interval, pendingIntent);
 //      [END] Set the alarm to trigger at 9 o'clock every day
     }
 }
