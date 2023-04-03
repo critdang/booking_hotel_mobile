@@ -1,5 +1,10 @@
 package com.example.myapplication;
 
+import static android.content.Context.ALARM_SERVICE;
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,13 +26,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.myapplication.Model.Profile;
+import com.example.myapplication.Utils.RequestInvoker;
+import com.example.myapplication.Utils.VolleyCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -95,89 +105,29 @@ public class fragment_login extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Log.i("Login", "Login button clicked");
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
-                loginUser(email, password);
+                RequestInvoker.loginUser(getContext(), email, password, new VolleyCallback<Profile>() {
+                    @Override
+                    public void onSuccess(Profile result) throws JSONException {
+                        Intent intent = new Intent(getActivity(), MainFunctionsActivity.class);
+                        intent.putExtra("profile", result);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onSuccess(List<Profile> result) throws JSONException {
+
+                    }
+
+                    @Override
+                    public void onError(String result) {
+                        Toast.makeText(getContext(), result, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
-        // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_login, container, false);
         return v;
-    }
-
-    
-    private void loginUser(String email, String password) {
-        String url = "http://10.0.2.2:8080/user/login"; // replace with your API URL
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // handle the response from the API here
-                        JSONObject jsonResponse = null;
-                        try {
-                            jsonResponse = new JSONObject(response);
-                        // Extract "message" string from JSONObject
-                            String message = jsonResponse.getString("message");
-                            String success = jsonResponse.getString("success");
-                            Log.i("Login", "API response message: " + message);
-                            if(Boolean.parseBoolean(success) == true ) {
-                                String filename = "userInfo.txt";
-                                String fileContents = message; // Concatenate user data into a single string
-                                try {
-                                    FileOutputStream outputStream = getActivity().openFileOutput(filename, Context.MODE_PRIVATE);
-                                    outputStream.write(fileContents.getBytes());
-                                    outputStream.close();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                Intent intent = new Intent(getActivity(), MainActivity2.class);
-                                startActivity(intent);
-                            }
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // handle errors here
-                            // get error message from VolleyError object
-                            String errorMessage = null;
-                            if (error.networkResponse != null && error.networkResponse.data != null) {
-                                try {
-                                    String errorResponse = new String(error.networkResponse.data, "UTF-8");
-                                    JSONObject errorObject = new JSONObject(errorResponse);
-                                    errorMessage = errorObject.getString("message");
-                                } catch (UnsupportedEncodingException e) {
-                                    e.printStackTrace();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            if (errorMessage == null) {
-                                errorMessage = error.getMessage();
-                            }
-                            // show error message in a Toast
-                            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
-                    }
-
-                }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("email", email);
-                params.put("password", password);
-                return params;
-            }
-        };
-
-        // add the request to the request queue
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
-        requestQueue.add(stringRequest);
     }
 }
