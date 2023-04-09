@@ -80,10 +80,7 @@ public class RateUsDialog extends Dialog {
                 else if(rating <=3){
                     raImageView.setImageResource(R.drawable.rate_tuyetvoi);
                 }
-
-
                 annimeteImage(raImageView);
-
                 userRate =rating;
             }
         });

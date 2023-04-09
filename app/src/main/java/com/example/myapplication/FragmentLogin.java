@@ -1,15 +1,10 @@
 package com.example.myapplication;
 
-import static android.content.Context.ALARM_SERVICE;
-import static androidx.core.content.ContextCompat.getSystemService;
-
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -20,32 +15,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Utils.RequestInvoker;
 import com.example.myapplication.Utils.VolleyCallback;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.FileOutputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link fragment_login#newInstance} factory method to
+ * Use the {@link FragmentLogin#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class fragment_login extends Fragment {
+public class FragmentLogin extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,8 +46,10 @@ public class fragment_login extends Fragment {
     private EditText etEmail;
 
     private EditText etPassword;
+    ProgressDialog mLoadingBar;
 
-    public fragment_login() {
+    FirebaseAuth mAuth;
+    public FragmentLogin() {
         // Required empty public constructor
     }
 
@@ -70,11 +59,11 @@ public class fragment_login extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment fragment_login.
+     * @return A new instance of fragment FragmentLogin.
      */
     // TODO: Rename and change types and number of parameters
-    public static fragment_login newInstance(String param1, String param2) {
-        fragment_login fragment = new fragment_login();
+    public static FragmentLogin newInstance(String param1, String param2) {
+        FragmentLogin fragment = new FragmentLogin();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -100,6 +89,8 @@ public class fragment_login extends Fragment {
         Log.i("Login", String.valueOf(btnLogin));
         etEmail = v.findViewById(R.id.et_email);
         etPassword = v.findViewById(R.id.et_password);
+        mLoadingBar= new ProgressDialog(getContext());
+        mAuth= FirebaseAuth.getInstance();
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,9 +101,10 @@ public class fragment_login extends Fragment {
                 RequestInvoker.loginUser(getContext(), email, password, new VolleyCallback<Profile>() {
                     @Override
                     public void onSuccess(Profile result) throws JSONException {
-                        Intent intent = new Intent(getActivity(), MainFunctionsActivity.class);
-                        intent.putExtra("profile", result);
-                        startActivity(intent);
+                        AttemptLogin(email, password, result);
+//                        Intent intent = new Intent(getActivity(), MainFunctionsActivity.class);
+//                        intent.putExtra("profile", result);
+//                        startActivity(intent);
                     }
 
                     @Override
@@ -129,5 +121,33 @@ public class fragment_login extends Fragment {
         });
 
         return v;
+    }
+
+    private void AttemptLogin(String email, String password, Profile result) {
+        mLoadingBar.setTitle("Login in");
+        mLoadingBar.setCanceledOnTouchOutside(false);
+        mLoadingBar.show();
+        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful())
+                {
+                    mLoadingBar.dismiss();
+                    Toast.makeText(getContext(), "Login is Successful", Toast.LENGTH_SHORT).show();
+                    Intent intent= new Intent(getContext(),MainFunctionsActivity.class);
+                    intent.putExtra("profile", result);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+                else {
+                    mLoadingBar.dismiss();
+                    Toast.makeText(getContext(), "Boo shit", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        Toast.makeText(getContext(), "Login is Successful", Toast.LENGTH_SHORT).show();
+        Intent intent= new Intent(getContext(), MainFunctionsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

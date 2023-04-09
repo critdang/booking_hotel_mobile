@@ -1,5 +1,11 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -7,18 +13,12 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Model.Post;
 import com.example.myapplication.ViewHolder.MyViewHolder;
@@ -47,21 +47,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ReviewFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class ReviewFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class CommentPostActivity extends AppCompatActivity {
     private static final int REQUEST_CODE =101;
     Uri imageUri;
     ImageView addImagePost, sendImagePost;
@@ -78,48 +64,23 @@ public class ReviewFragment extends Fragment {
 
     RecyclerView recyclerView;
     String cId;
-    public ReviewFragment() {
-        // Required empty public constructor
-    }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ReviewFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ReviewFragment newInstance(String param1, String param2) {
-        ReviewFragment fragment = new ReviewFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
+
+
+
+    @SuppressLint("MissingInflatedId")
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+        setContentView(R.layout.activity_comment_post);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_comment_post, container, false);
-        addImagePost = rootView.findViewById(R.id.add_ImagePost);
-        sendImagePost = rootView.findViewById(R.id.send_post_imageView);
-        inputPostDesc = rootView.findViewById(R.id.inputAddPost);
+        addImagePost = findViewById(R.id.add_ImagePost);
+        sendImagePost = findViewById(R.id.send_post_imageView);
+        inputPostDesc = findViewById(R.id.inputAddPost);
 
         mAuth = FirebaseAuth.getInstance();
         mUser= mAuth.getCurrentUser();
-        Log.i("User",mUser.getEmail());
         mUserRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
 
@@ -128,9 +89,9 @@ public class ReviewFragment extends Fragment {
         postImageRef = FirebaseStorage.getInstance().getReference().child("PostImage");
         likeRef =  FirebaseDatabase.getInstance().getReference().child("Likes");
         commentRef = FirebaseDatabase.getInstance().getReference().child("Comments");
-        mLoadingBar = new ProgressDialog(getContext());
-        recyclerView= rootView.findViewById(R.id.recyclerievew);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mLoadingBar = new ProgressDialog(this);
+        recyclerView= findViewById(R.id.recyclerievew);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
 
@@ -149,8 +110,9 @@ public class ReviewFragment extends Fragment {
             }
         });
         LoadPost();
-        return rootView;
     }
+
+
     private void LoadPost() {
 //        String userEmail = mUser.getEmail();
 
@@ -160,6 +122,12 @@ public class ReviewFragment extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Post model) {
                 String postID = model.getPostID();
+
+
+
+                //                Intent intent = getIntent();
+
+
                 String postKey = getRef(position).getKey();
                 holder.postDesc.setText(model.getPostDesc());
                 holder.timeAgo.setText(model.getDate());
@@ -169,12 +137,17 @@ public class ReviewFragment extends Fragment {
                 Picasso.get().load(model.getPostImageUrl()).into(holder.postImage);
                 holder.countLikes(postKey,mUser.getUid(),likeRef);
                 holder.countComments(postID, mUser.getUid(), FirebaseDatabase.getInstance().getReference().child("Comments"));
+
+
+
                 holder.moreBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
                     }
                 });
+
+
 
                 holder.likeImage.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -197,7 +170,7 @@ public class ReviewFragment extends Fragment {
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
-                                Toast.makeText(getContext(),""+error.getMessage(),Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CommentPostActivity.this,""+error.getMessage(),Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -206,12 +179,15 @@ public class ReviewFragment extends Fragment {
                 holder.commentsImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(getContext(), PostDetailActivity.class);
+                        Intent intent = new Intent(CommentPostActivity.this, PostDetailActivity.class);
                         intent.putExtra("postID", postID);
                         startActivity(intent);
+
                     }
                 });
+
             }
+
             @NonNull
             @Override
             public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -223,6 +199,9 @@ public class ReviewFragment extends Fragment {
         adapter.startListening();
         recyclerView.setAdapter(adapter);
     }
+
+
+
 
     private String calculateTimeago(String date) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
@@ -240,9 +219,9 @@ public class ReviewFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
         super.onActivityResult(requestCode,resultCode,data);
-        if (requestCode==REQUEST_CODE && resultCode== Activity.RESULT_OK && data!=null){
+        if (requestCode==REQUEST_CODE && resultCode== RESULT_OK && data!=null){
             imageUri = data.getData();
             addImagePost.setImageURI(imageUri);
         }
@@ -254,7 +233,7 @@ public class ReviewFragment extends Fragment {
             inputPostDesc.setError("Please write something.");
         }
         else if(imageUri==null){
-            Toast.makeText(getContext(),"please select an image", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"please select an image", Toast.LENGTH_SHORT).show();
         }
         else{
             mLoadingBar.setTitle("Adding Post");
@@ -266,7 +245,9 @@ public class ReviewFragment extends Fragment {
             Date date = new Date();
             SimpleDateFormat formatter =  new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
             String strDate = formatter.format(date);
+            //get user email
             String userEmail = mUser.getEmail();
+
             String timeStamp = String.valueOf(System.currentTimeMillis());
 
             // Lưu ý nếu khi đã có user thì phảo theem dòng  .child(mUser.getUid() + strDate)
@@ -278,6 +259,9 @@ public class ReviewFragment extends Fragment {
                         postImageRef.child(mUser.getUid() + strDate).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
+
+
+
                                 HashMap hashMap= new HashMap();
                                 hashMap.put("date",strDate);
                                 hashMap.put("postImageUrl",uri.toString());
@@ -293,26 +277,30 @@ public class ReviewFragment extends Fragment {
                                         {
                                             mLoadingBar.dismiss();
                                             //make a noti
-                                            Toast.makeText(getContext(),"Post Added", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(CommentPostActivity.this,"Post Added", Toast.LENGTH_SHORT).show();
                                             addImagePost.setImageURI(null);
                                             inputPostDesc.setText("");
                                         }
                                         else {
                                             mLoadingBar.dismiss();
-                                            Toast.makeText(getContext(),""+task.getException().toString(),Toast.LENGTH_SHORT);
+                                            Toast.makeText(CommentPostActivity.this,""+task.getException().toString(),Toast.LENGTH_SHORT);
                                         }
                                     }
                                 });
+
                             }
                         });
                     }
                     else
                     {
                         mLoadingBar.dismiss();
-                        Toast.makeText(getContext(),""+task.getException().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CommentPostActivity.this,""+task.getException().toString(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
         }
+
+
+
     }
 }

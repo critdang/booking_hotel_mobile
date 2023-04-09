@@ -7,8 +7,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,10 +30,10 @@ public class MainActivity2 extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         ViewPager viewPager = findViewById(R.id.viewPager);
         MainActivity.AuthenticationPagerAdapter pagerAdapter = new MainActivity.AuthenticationPagerAdapter(getSupportFragmentManager());
-        pagerAdapter.addFragmet(new fragment_rate_us_dialog());
+        pagerAdapter.addFragmet(new FragmentRateUsDialog());
         viewPager.setAdapter(pagerAdapter);
 //      [NORMAL WITHOU method - showRateUsDialog ] Show the rate_us_dialog fragment as a dialog
-        //fragment_rate_us_dialog dialogFragment = new fragment_rate_us_dialog();
+        //FragmentRateUsDialog dialogFragment = new FragmentRateUsDialog();
         //dialogFragment.show(getSupportFragmentManager(), "rate_us_dialog");
 
 //      [ALARM] Show the rate_us_dialog fragment as a dialog
@@ -78,7 +76,7 @@ public class MainActivity2 extends AppCompatActivity {
     public void showRateUsDialog() {
         Log.d("MainActivity2", "showRateUsDialog() called at"+ new Date());
         FragmentManager fm = getSupportFragmentManager();
-        fragment_rate_us_dialog dialog = new fragment_rate_us_dialog();
+        FragmentRateUsDialog dialog = new FragmentRateUsDialog();
         dialog.show(fm, "rate_us_dialog");
     }
     private void setAlarm() {
