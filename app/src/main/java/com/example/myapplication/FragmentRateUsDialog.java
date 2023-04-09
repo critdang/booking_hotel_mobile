@@ -2,7 +2,6 @@ package com.example.myapplication;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,7 +24,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
@@ -33,7 +31,6 @@ import org.json.JSONObject;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.CookieHandler;
@@ -51,10 +48,10 @@ import pl.droidsonroids.gif.GifImageView;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link fragment_rate_us_dialog#newInstance} factory method to
+ * Use the {@link FragmentRateUsDialog#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class fragment_rate_us_dialog extends DialogFragment {
+public class FragmentRateUsDialog extends DialogFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -66,7 +63,7 @@ public class fragment_rate_us_dialog extends DialogFragment {
     private String mParam2;
     private float userRate =0;
     private String accessToken;
-    public fragment_rate_us_dialog() {
+    public FragmentRateUsDialog() {
         // Required empty public constructor
     }
 
@@ -79,8 +76,8 @@ public class fragment_rate_us_dialog extends DialogFragment {
      * @return A new instance of fragment rate_us_dialog.
      */
     // TODO: Rename and change types and number of parameters
-    public static fragment_rate_us_dialog newInstance(String param1, String param2) {
-        fragment_rate_us_dialog fragment = new fragment_rate_us_dialog();
+    public static FragmentRateUsDialog newInstance(String param1, String param2) {
+        FragmentRateUsDialog fragment = new FragmentRateUsDialog();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

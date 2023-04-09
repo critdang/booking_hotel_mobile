@@ -111,7 +111,7 @@ public class MainFunctionsActivity extends AppCompatActivity {
     public void showRateUsDialog() {
         Log.d("MainFunctionsActivity", "showRateUsDialog() called at" + new Date());
         FragmentManager fm = getSupportFragmentManager();
-        fragment_rate_us_dialog dialog = new fragment_rate_us_dialog();
+        FragmentRateUsDialog dialog = new FragmentRateUsDialog();
         dialog.show(fm, "rate_us_dialog");
     }
 }

@@ -6,12 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.airbnb.lottie.L;
 import com.android.volley.Request;
@@ -70,11 +74,13 @@ public class ServiceFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView;
         ListView listView;
-//    TextView searchEditText;
         SearchView searchView;
         Button sortButton, filterButton;
+        AppCompatImageView listButton;
         rootView = inflater.inflate(R.layout.fragment_service, container, false);
-        listView = (ListView) rootView.findViewById(R.id.service_list);
+        View editView = inflater.inflate(R.layout.fragment_profile_edit,container,true);
+        LinearLayout edit_profile_layout = editView.findViewById(R.id.edit_profile_layout);
+        listView = rootView.findViewById(R.id.service_list);
 
         List<Service> initialList = new ArrayList<>();
         List<Service> serviceList = new ArrayList<>();
@@ -82,7 +88,7 @@ public class ServiceFragment extends Fragment {
         searchView = rootView.findViewById(R.id.search_view);
         sortButton = rootView.findViewById(R.id.button_sort);
         filterButton = rootView.findViewById(R.id.button_filter);
-
+        listButton = rootView.findViewById(R.id.list_service_btn);
         RequestInvoker.renderService(getContext(), new VolleyCallback<Service>() {
             @Override
             public void onSuccess(Service result) throws JSONException {
@@ -133,7 +139,13 @@ public class ServiceFragment extends Fragment {
             return false;
         });
 
-
+        listButton.setOnClickListener(v -> {
+//            rootView.setVisibility(View.GONE);
+//            edit_profile_layout.setVisibility(View.VISIBLE);
+            FragmentManager fm = getParentFragmentManager();
+            BookedServiceFragment dialog = new BookedServiceFragment();
+            dialog.show(fm, "rate_us_dialog");
+        });
         sortButton.setOnClickListener(v -> {
             PopupMenu menu = new PopupMenu(this.getContext(), v);
             menu.getMenuInflater().inflate(R.menu.sort_popup_menu, menu.getMenu());
