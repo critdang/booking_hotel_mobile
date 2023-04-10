@@ -34,7 +34,8 @@ public class MainFunctionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_functions);
         binding = ActivityMainFunctionsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replaceFragment(new ServiceFragment());
+        Profile profile = (Profile) getIntent().getSerializableExtra("profile");
+        replaceFragment(ServiceFragment.getInstance(profile));
         BottomNavigationView bottom_navigation_bar = findViewById(R.id.bottom_navbar);
         setAlarm();
         bottom_navigation_bar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

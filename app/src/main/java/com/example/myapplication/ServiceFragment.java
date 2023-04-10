@@ -64,7 +64,7 @@ public class ServiceFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = (Profile) getArguments().getSerializable(ARG_PARAM1);
+            mParam1 = (Profile) getArguments().getSerializable(ARG_PARAM2);
         }
     }
 
@@ -100,6 +100,8 @@ public class ServiceFragment extends Fragment {
                 serviceList.addAll(result);
                 filterList.addAll(result);
                 ServiceItemAdaptor adaptor = new ServiceItemAdaptor(getActivity(), R.layout.service_item_adaptor, initialList);
+                Log.i("prosssssssssssssss", mParam1.toString());
+                adaptor.setProfile(mParam1);
                 listView.setAdapter(adaptor);
             }
             @Override
@@ -143,8 +145,8 @@ public class ServiceFragment extends Fragment {
 //            rootView.setVisibility(View.GONE);
 //            edit_profile_layout.setVisibility(View.VISIBLE);
             FragmentManager fm = getParentFragmentManager();
-            BookedServiceFragment dialog = new BookedServiceFragment();
-            dialog.show(fm, "rate_us_dialog");
+            BookedServiceFragment dialog = BookedServiceFragment.newInstance(mParam1);
+            dialog.show(fm, "requested_service");
         });
         sortButton.setOnClickListener(v -> {
             PopupMenu menu = new PopupMenu(this.getContext(), v);

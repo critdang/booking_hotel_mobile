@@ -119,10 +119,7 @@ public class ReviewFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         mUser= mAuth.getCurrentUser();
-        Log.i("User",mUser.getEmail());
         mUserRef = FirebaseDatabase.getInstance().getReference().child("Users");
-
-
 
         postRef = FirebaseDatabase.getInstance().getReference().child("Post");
         postImageRef = FirebaseStorage.getInstance().getReference().child("PostImage");
@@ -131,8 +128,6 @@ public class ReviewFragment extends Fragment {
         mLoadingBar = new ProgressDialog(getContext());
         recyclerView= rootView.findViewById(R.id.recyclerievew);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-
 
         sendImagePost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,7 +154,8 @@ public class ReviewFragment extends Fragment {
 
             @Override
             protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Post model) {
-                String postID = model.getPostID();
+                String postId = model.getPostID();
+                //                Intent intent = getIntent();
                 String postKey = getRef(position).getKey();
                 holder.postDesc.setText(model.getPostDesc());
                 holder.timeAgo.setText(model.getDate());
@@ -168,13 +164,15 @@ public class ReviewFragment extends Fragment {
                 holder.userEmail.setText(model.getUserEmail());
                 Picasso.get().load(model.getPostImageUrl()).into(holder.postImage);
                 holder.countLikes(postKey,mUser.getUid(),likeRef);
-                holder.countComments(postID, mUser.getUid(), FirebaseDatabase.getInstance().getReference().child("Comments"));
+                holder.countComments(postKey, mUser.getUid(), FirebaseDatabase.getInstance().getReference("Post").child(postId).child("Comments"));
                 holder.moreBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
                     }
                 });
+
+
 
                 holder.likeImage.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -207,11 +205,14 @@ public class ReviewFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(getContext(), PostDetailActivity.class);
-                        intent.putExtra("postID", postID);
+                        intent.putExtra("postID", postId);
                         startActivity(intent);
+
                     }
                 });
+
             }
+
             @NonNull
             @Override
             public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -223,6 +224,9 @@ public class ReviewFragment extends Fragment {
         adapter.startListening();
         recyclerView.setAdapter(adapter);
     }
+
+
+
 
     private String calculateTimeago(String date) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
@@ -240,7 +244,7 @@ public class ReviewFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+    public void onActivityResult(int requestCode, int resultCode, @Nullable  Intent data){
         super.onActivityResult(requestCode,resultCode,data);
         if (requestCode==REQUEST_CODE && resultCode== Activity.RESULT_OK && data!=null){
             imageUri = data.getData();
@@ -266,18 +270,24 @@ public class ReviewFragment extends Fragment {
             Date date = new Date();
             SimpleDateFormat formatter =  new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
             String strDate = formatter.format(date);
+            //get user email
             String userEmail = mUser.getEmail();
+
             String timeStamp = String.valueOf(System.currentTimeMillis());
+            String postID = timeStamp;
 
             // Lưu ý nếu khi đã có user thì phảo theem dòng  .child(mUser.getUid() + strDate)
 
-            postImageRef.child(mUser.getUid() + strDate).putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            postImageRef.child(postID).putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                     if (task.isSuccessful()){
-                        postImageRef.child(mUser.getUid() + strDate).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        postImageRef.child(postID).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
+
+
+
                                 HashMap hashMap= new HashMap();
                                 hashMap.put("date",strDate);
                                 hashMap.put("postImageUrl",uri.toString());
@@ -286,7 +296,7 @@ public class ReviewFragment extends Fragment {
                                 hashMap.put("postID", timeStamp);
                                 //hash map user ID
                                 //hashMap.put("userName",usernameV);
-                                postRef.child(mUser.getUid() + strDate).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                                postRef.child(postID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                                     @Override
                                     public void onComplete(@NonNull Task task) {
                                         if (task.isSuccessful())
@@ -303,6 +313,7 @@ public class ReviewFragment extends Fragment {
                                         }
                                     }
                                 });
+
                             }
                         });
                     }
@@ -314,5 +325,8 @@ public class ReviewFragment extends Fragment {
                 }
             });
         }
+
+
+
     }
 }

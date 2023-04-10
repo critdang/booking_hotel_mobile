@@ -57,14 +57,13 @@ public class ServiceRequestedAdaptor extends ArrayAdapter<RequestedService> {
         final RequestedService content = contentList.get(position);
         String name = (position+1) +". " + content.getName();
         String price = "Price: "+ content.getPrice()+ "$";
-        String count = "Count: "+ content.getCount();
         String status = "Status: "+ content.getStatus();
         TextView serviceName = cellView.findViewById(R.id.requested_service_name_text);
         serviceName.setText(name);
         TextView servicePrice = cellView.findViewById(R.id.requested_service_price_text);
         servicePrice.setText(price);
         TextView serviceCount = cellView.findViewById(R.id.requested_service_count_text);
-        serviceCount.setText(count);
+        serviceCount.setText("");
         TextView serviceStatus = cellView.findViewById(R.id.requested_service_status_text);
         serviceStatus.setText(status);
         return cellView;

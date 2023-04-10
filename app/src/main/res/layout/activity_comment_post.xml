@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CommentPost"
+    tools:context=".CommentPostActivity"
     android:id="@+id/drawerLayout">
 
 
@@ -22,11 +22,11 @@
         <!--            tools:layout_editor_absoluteY="60dp" -->
         <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-<!--        <include-->
-<!--            android:id="@+id/app_bar"-->
-<!--            layout="@layout/tool_bar"-->
-<!--            tools:layout_editor_absoluteX="0dp"-->
-<!--            tools:layout_editor_absoluteY="60dp" />-->
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/tool_bar"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="60dp" />
 
         <EditText
             android:id="@+id/inputAddPost"
@@ -41,7 +41,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/app_bar" />
+            app:layout_constraintTop_toTopOf="parent"/>
+<!--            app:layout_constraintTop_toBottomOf="@+id/app_bar"-->
+
 
         <ImageView
             android:id="@+id/add_ImagePost"

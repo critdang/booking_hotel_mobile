@@ -1,5 +1,7 @@
 package com.example.myapplication.Model;
 
+import androidx.annotation.NonNull;
+
 public class Post {
     private String date, postDesc, postImageUrl, userEmail,postID;
 
@@ -52,6 +54,18 @@ public class Post {
 
     public void setPostID(String postID) {
         this.postID = postID;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Post{" +
+                "date='" + date + '\'' +
+                ", postDesc='" + postDesc + '\'' +
+                ", postImageUrl='" + postImageUrl + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", postID='" + postID + '\'' +
+                '}';
     }
 }
 

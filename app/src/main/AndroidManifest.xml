@@ -22,10 +22,12 @@
         tools:targetApi="31">
         <activity
             android:name=".PostDetailActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Comment_mb"/>
         <activity
             android:name=".CommentPostActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Comment_mb"/>
         <activity
             android:name=".MainFunctionsActivity"
             android:exported="false"
