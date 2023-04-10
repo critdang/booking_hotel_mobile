@@ -8,14 +8,16 @@ public class RequestedService {
     private String name;
     private int price;
     private String status;
-    private int count;
+
 
     public static List<RequestedService> serviceList = new ArrayList<>();
-    public RequestedService(String name, int price, int count, String status){
-        this.count = count;
+    public RequestedService(String name, int price, String status){
         this.setName(name);
         this.setPrice(price);
         this.setStatus(status);
+
+    }
+    public RequestedService(){
 
     }
     public static List<RequestedService> getInstance() {
@@ -79,14 +81,6 @@ public class RequestedService {
         Arrays.sort(servicesArray, (o1, o2) -> o2.getPrice() - o1.getPrice());
         services.clear();
         services.addAll(Arrays.asList(servicesArray));
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
     }
 }
 
