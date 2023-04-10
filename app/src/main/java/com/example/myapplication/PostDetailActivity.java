@@ -42,17 +42,12 @@ import java.util.List;
 public class PostDetailActivity extends AppCompatActivity {
     ImageView postImage,likeImage,commentsImage, commentSend;
     TextView userEmailcm,timeAgo,postDesc,likeCounter,commentCounter;
-
     EditText inputComments;
     ImageButton sendBtn;
 
     ProgressDialog pd;
 
     String postId, uEmail, pLikes, pDesc, pImg;
-
-
-
-
     RecyclerView recyclerView;
 
     FirebaseAuth mAuth;
@@ -80,16 +75,15 @@ public class PostDetailActivity extends AppCompatActivity {
         postId = intent.getStringExtra("postID");
 
         //init view
-        likeImage = findViewById(R.id.likeImage);
+
         postImage = findViewById(R.id.viewImagePostComment);
-        commentsImage = findViewById(R.id.commentImage);
+
         commentSend = findViewById(R.id.sendCommentBtn);
 
         userEmailcm = findViewById(R.id.profileUsernamePost);
         timeAgo = findViewById(R.id.timeAgo);
         postDesc = findViewById(R.id.postDesc);
-        likeCounter = findViewById(R.id.likesCounter);
-        commentCounter = findViewById(R.id.commentsCounter);
+
         recyclerView = findViewById(R.id.recyclerievew);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -106,7 +100,7 @@ public class PostDetailActivity extends AppCompatActivity {
         postRef = FirebaseDatabase.getInstance().getReference().child("Post");
         postImageRef = FirebaseStorage.getInstance().getReference().child("PostImage");
         likeRef =  FirebaseDatabase.getInstance().getReference().child("Likes");
-        commentRef = FirebaseDatabase.getInstance().getReference().child("Comments");
+        commentRef = FirebaseDatabase.getInstance().getReference("Post").child(postId).child("Comments");
         mLoadingBar = new ProgressDialog(this);
         recyclerView= findViewById(R.id.recyclerievew);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -193,10 +187,10 @@ public class PostDetailActivity extends AppCompatActivity {
     private void addComments() {
         String timeStamp = String.valueOf(System.currentTimeMillis());
         pd = new ProgressDialog(this);
-        pd.setMessage("Adding Comment .....");
+        pd.setMessage("Adding comment .....");
         String userEmail = mUser.getEmail();
 
-        //get data from Comment edit text
+        //get data from comment edit text
         String Comments = inputComments.getText().toString().trim();
         //validate
         if(TextUtils.isEmpty(Comments)){
@@ -204,17 +198,18 @@ public class PostDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "Comment is empty....",Toast.LENGTH_SHORT).show();
             return;
         }
-        commentRef.child(postId).child("commentsID");
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Post").child(postId).child("Comments");
 
         HashMap<String,Object> hashMap= new HashMap<>();
-        hashMap.put("Comment", Comments);
+        hashMap.put("comment", Comments);
         hashMap.put("userEmail",userEmail);
         hashMap.put("postID", postId);
         hashMap.put("cId", timeStamp);
 
 
         //put this data in db
-        commentRef.child(timeStamp).updateChildren(hashMap)
+        ref.child(timeStamp).updateChildren(hashMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {

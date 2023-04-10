@@ -26,16 +26,15 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     public ImageView postImage,likeImage,commentsImage, commentSend;
     public TextView userEmail,timeAgo,postDesc,likeCounter,commentCounter;
     public EditText inputCommets;
-
     public ImageButton moreBtn;
     public Context context;
-    public List<Post> postList;
+    public List<Post> postsList;
     public String myUid;
 
-    public MyViewHolder(@NonNull View itemView, Context context, List<Post> postList) {
+    public MyViewHolder(@NonNull View itemView, Context context, List<Post> postsList) {
         super(itemView);
         this.context = context;
-        this.postList = postList;
+        this.postsList = postsList;
         myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
@@ -114,5 +113,4 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
 
 
 }
-
 

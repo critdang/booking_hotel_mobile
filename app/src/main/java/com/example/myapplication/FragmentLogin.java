@@ -102,9 +102,6 @@ public class FragmentLogin extends Fragment {
                     @Override
                     public void onSuccess(Profile result) throws JSONException {
                         AttemptLogin(email, password, result);
-//                        Intent intent = new Intent(getActivity(), MainFunctionsActivity.class);
-//                        intent.putExtra("profile", result);
-//                        startActivity(intent);
                     }
 
                     @Override
@@ -141,13 +138,13 @@ public class FragmentLogin extends Fragment {
                 }
                 else {
                     mLoadingBar.dismiss();
-                    Toast.makeText(getContext(), "Boo shit", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Connect firebase fail", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        Toast.makeText(getContext(), "Login is Successful", Toast.LENGTH_SHORT).show();
-        Intent intent= new Intent(getContext(), MainFunctionsActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+//        Toast.makeText(getContext(), "Login is Successful", Toast.LENGTH_SHORT).show();
+//        Intent intent= new Intent(getContext(), MainFunctionsActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(intent);
     }
 }

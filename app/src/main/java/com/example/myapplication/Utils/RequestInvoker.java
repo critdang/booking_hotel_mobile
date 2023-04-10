@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.airbnb.lottie.L;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -105,7 +104,7 @@ public class RequestInvoker {
                             String message = jsonResponse.getString("message");
                             String success = jsonResponse.getString("success");
                             JSONObject data = jsonResponse.getJSONObject("message").getJSONObject("userInfo");
-                            Log.i("Login", "API response message: " + message);
+
                             if (Boolean.parseBoolean(success) == true) {
                                 // Create a new Profile object
 //                                int id, String name, String email, String phone, String address, String gender, String avatar;
@@ -117,8 +116,9 @@ public class RequestInvoker {
                                 String address = data.getString("address");
                                 String gender = data.getString("gender");
                                 String avatar = data.getString("avatar");
+                                String code = data.getString("code");
                                 String accessToken = jsonResponse.getJSONObject("message").getString("accessToken");
-                                Profile profile = new Profile(1, name, email, phone, address, gender, accessToken, avatar);
+                                Profile profile = new Profile(1, name, email, phone, address, gender, accessToken, code, avatar);
 
                                 callback.onSuccess(profile);
                             }

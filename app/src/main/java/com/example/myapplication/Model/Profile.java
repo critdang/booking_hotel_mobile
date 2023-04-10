@@ -10,6 +10,7 @@ public class Profile implements Serializable {
     private String address;
     private String gender;
     private String accessToken;
+    private String code;
     public String getAvatar() {
         return avatar;
     }
@@ -67,7 +68,7 @@ public class Profile implements Serializable {
         this.gender = gender;
     }
 
-    public Profile(int id, String name, String email, String phone, String address, String gender, String accessToken, String avatar) {
+    public Profile(int id, String name, String email, String phone, String address, String gender, String accessToken, String code, String avatar) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -75,6 +76,7 @@ public class Profile implements Serializable {
         this.address = address;
         this.gender = gender;
         this.accessToken = accessToken;
+        this.code = code;
         this.avatar = avatar;
     }
     public Profile() {
@@ -100,5 +102,13 @@ public class Profile implements Serializable {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }
