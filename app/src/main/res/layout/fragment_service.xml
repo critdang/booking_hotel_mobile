@@ -62,8 +62,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:backgroundTint="#007AFE"
                 android:text="Sort"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                app:icon="@android:drawable/ic_menu_sort_by_size"
+                app:iconPadding="0dp"
+                app:iconSize="20dp"
+                app:iconTint="#FFFFFF" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -78,6 +84,8 @@
                 android:text="Filter"
                 android:textAllCaps="false"
                 android:textColor="#007AFE"
+                app:icon="@drawable/ic_filter"
+                app:iconSize="20dp"
                 app:strokeColor="#007AFE"
                 app:strokeWidth="2dp" />
 

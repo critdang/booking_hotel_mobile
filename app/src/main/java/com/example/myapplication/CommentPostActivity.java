@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +66,7 @@ public class CommentPostActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     String cId;
 
-
+    String postId;
 
 
 
@@ -82,13 +83,14 @@ public class CommentPostActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mUser= mAuth.getCurrentUser();
         mUserRef = FirebaseDatabase.getInstance().getReference().child("Users");
-
+        Intent intent = getIntent();
+        postId = intent.getStringExtra("postID");
 
 
         postRef = FirebaseDatabase.getInstance().getReference().child("Post");
         postImageRef = FirebaseStorage.getInstance().getReference().child("PostImage");
         likeRef =  FirebaseDatabase.getInstance().getReference().child("Likes");
-        commentRef = FirebaseDatabase.getInstance().getReference().child("Comments");
+        commentRef = FirebaseDatabase.getInstance().getReference("Post").child(postId).child("Comments");
         mLoadingBar = new ProgressDialog(this);
         recyclerView= findViewById(R.id.recyclerievew);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -114,14 +116,14 @@ public class CommentPostActivity extends AppCompatActivity {
 
 
     private void LoadPost() {
-//        String userEmail = mUser.getEmail();
+        String userEmail = mUser.getEmail();
 
-        options= new FirebaseRecyclerOptions.Builder<Post>().setQuery(postRef, Post.class).build();
+        options= new FirebaseRecyclerOptions.Builder<Post>().setQuery(postRef,Post.class).build();
         adapter = new FirebaseRecyclerAdapter<Post, MyViewHolder>(options) {
-
             @Override
             protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Post model) {
-                String postID = model.getPostID();
+                String postId = model.getPostID();
+
 
 
 
@@ -129,6 +131,7 @@ public class CommentPostActivity extends AppCompatActivity {
 
 
                 String postKey = getRef(position).getKey();
+                Log.i("posttkey","post key: "+postKey);
                 holder.postDesc.setText(model.getPostDesc());
                 holder.timeAgo.setText(model.getDate());
                 String timeAgo = calculateTimeago(model.getDate());
@@ -136,9 +139,9 @@ public class CommentPostActivity extends AppCompatActivity {
                 holder.userEmail.setText(model.getUserEmail());
                 Picasso.get().load(model.getPostImageUrl()).into(holder.postImage);
                 holder.countLikes(postKey,mUser.getUid(),likeRef);
-                holder.countComments(postID, mUser.getUid(), FirebaseDatabase.getInstance().getReference().child("Comments"));
+                holder.countComments(postKey, mUser.getUid(), FirebaseDatabase.getInstance().getReference("Post").child(postId).child("Comments"));
 
-
+//                holder.countComments(postKey, mUser.getUid(), postRef);
 
                 holder.moreBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -180,7 +183,7 @@ public class CommentPostActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(CommentPostActivity.this, PostDetailActivity.class);
-                        intent.putExtra("postID", postID);
+                        intent.putExtra("postID", postId);
                         startActivity(intent);
 
                     }
@@ -219,7 +222,7 @@ public class CommentPostActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable  Intent data){
         super.onActivityResult(requestCode,resultCode,data);
         if (requestCode==REQUEST_CODE && resultCode== RESULT_OK && data!=null){
             imageUri = data.getData();
@@ -249,18 +252,17 @@ public class CommentPostActivity extends AppCompatActivity {
             String userEmail = mUser.getEmail();
 
             String timeStamp = String.valueOf(System.currentTimeMillis());
+            String postID = timeStamp;
 
             // Lưu ý nếu khi đã có user thì phảo theem dòng  .child(mUser.getUid() + strDate)
 
-            postImageRef.child(mUser.getUid() + strDate).putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            postImageRef.child(postID).putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                     if (task.isSuccessful()){
-                        postImageRef.child(mUser.getUid() + strDate).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        postImageRef.child(postID).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
-
-
 
                                 HashMap hashMap= new HashMap();
                                 hashMap.put("date",strDate);
@@ -270,7 +272,7 @@ public class CommentPostActivity extends AppCompatActivity {
                                 hashMap.put("postID", timeStamp);
                                 //hash map user ID
                                 //hashMap.put("userName",usernameV);
-                                postRef.child(mUser.getUid() + strDate).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                                postRef.child(postID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                                     @Override
                                     public void onComplete(@NonNull Task task) {
                                         if (task.isSuccessful())

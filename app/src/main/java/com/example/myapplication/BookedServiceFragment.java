@@ -4,8 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
@@ -14,18 +14,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.myapplication.Adaptor.ServiceRequestedAdaptor;
+import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.RequestedService;
-import com.example.myapplication.Model.Service;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import pl.droidsonroids.gif.GifImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,31 +37,24 @@ public class BookedServiceFragment extends DialogFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM1 = "requested service";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private Profile profile;
     public BookedServiceFragment() {
-        // Required empty public constructor
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment BookedServiceFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BookedServiceFragment newInstance(String param1, String param2) {
+    public static BookedServiceFragment newInstance(Profile profile) {
         BookedServiceFragment fragment = new BookedServiceFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(ARG_PARAM1, profile);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,8 +63,7 @@ public class BookedServiceFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            profile = (Profile) getArguments().getSerializable(ARG_PARAM1);
         }
     }
 
@@ -89,22 +82,32 @@ public class BookedServiceFragment extends DialogFragment {
         ListView ls = view.findViewById(R.id.rq_service_list);
         TextView total_text = view.findViewById(R.id.total_price);
         Button returnBtn = view.findViewById(R.id.returnBtn);
-        int total = 0;
 
-        List<RequestedService> sv = new ArrayList<>();
-        sv.add(new RequestedService("Cut hair", 100, 2, "Pending"));
-        sv.add(new RequestedService("Laundry", 200, 3, "Pending"));
-        sv.add(new RequestedService("Wash car", 300, 1, "Pending"));
-        sv.add(new RequestedService("Cut hair", 100, 2, "Pending"));
-        sv.add(new RequestedService("Laundry", 200, 3, "Pending"));
-        sv.add(new RequestedService("Wash car", 300, 1, "Pending"));
-        ServiceRequestedAdaptor adaptor = new ServiceRequestedAdaptor(getActivity(),R.layout.requested_item_adaptor, sv);
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference reference = firebaseDatabase.getReference("/Service_request/"+profile.getCode());
+        List<RequestedService> requests = new ArrayList<>();
+        ServiceRequestedAdaptor adaptor = new ServiceRequestedAdaptor(getActivity(),R.layout.requested_item_adaptor, requests);
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Get the list of comments from the snapshot
+                int total = 0;
+                for (DataSnapshot commentSnapshot : snapshot.getChildren()) {
+                    RequestedService s = commentSnapshot.getValue(RequestedService.class);
+                    requests.add(s);
+                    total += s.getPrice();
+                }
+                total_text.setText("TOTAL: " + total + "$");
+                // Update the RecyclerView adapter with the new comments
+                adaptor.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle errors
+            }
+        });
         ls.setAdapter(adaptor);
-
-        for (RequestedService s : sv) {
-            total += s.getPrice() * s.getCount();
-        }
-        total_text.setText("TOTAL: " + total + "$");
         returnBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

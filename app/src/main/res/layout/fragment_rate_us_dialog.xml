@@ -54,17 +54,6 @@
                 android:textStyle="bold"
                 android:layout_gravity="center"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
-                android:gravity="center"
-                android:text="If you have any question, please contact to our receptionist"
-                android:textSize="16sp" />
-
             <androidx.appcompat.widget.AppCompatRatingBar
                 android:id="@+id/ratingBar"
                 android:numStars="3"

@@ -52,6 +52,7 @@ public class ProfileFragment extends Fragment {
     private TextView fullNameTextView, addressTextView, genderTextView, phoneTextView;
     private EditText fullNameEditText, addressEditText, phoneEditText;
     private ImageView avatarImageView;
+
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -67,15 +68,13 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            profileParam = (Profile) getArguments().getSerializable(ARG_PARAM);
-        }
+        profileParam = (Profile) getArguments().getSerializable(ARG_PARAM);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        View editView = inflater.inflate(R.layout.fragment_profile_edit,container,true);
+        View editView = inflater.inflate(R.layout.fragment_profile_edit, container, true);
         // Find views by their ids
 
         // view of fragment profile
@@ -88,7 +87,7 @@ public class ProfileFragment extends Fragment {
         editButton = view.findViewById(R.id.button_edit);
 
         //view of fragment profile edit
-        fullNameEditText =editView.findViewById((R.id.name_edit_text));
+        fullNameEditText = editView.findViewById((R.id.name_edit_text));
         phoneEditText = editView.findViewById((R.id.phone_edit_text));
         addressEditText = editView.findViewById((R.id.address_edit_text));
 
@@ -107,7 +106,7 @@ public class ProfileFragment extends Fragment {
         addressTextView.setText(profileParam.getAddress());
         genderTextView.setText(profileParam.getGender());
         phoneTextView.setText(profileParam.getPhone());
-        RequestInvoker.loadImageFromURL(this.getContext(),profileParam.getAvatar(), avatarImageView);
+        RequestInvoker.loadImageFromURL(this.getContext(), profileParam.getAvatar(), avatarImageView);
 //                avatarImageView.setImageResource(R.drawable.ic_profile);
 
         // Set click listener for logout button
@@ -158,8 +157,8 @@ public class ProfileFragment extends Fragment {
                 try {
                     jsonObject.put("fullName", fullNameEditText.getText());
                     jsonObject.put("phone", phoneEditText.getText());
-                    jsonObject.put("address",addressEditText.getText());
-                    jsonObject.put("gender",selectedRadioButton.getText());
+                    jsonObject.put("address", addressEditText.getText());
+                    jsonObject.put("gender", selectedRadioButton.getText());
 
                     // send update request to server
                     RequestInvoker.updateUser(getContext(), jsonObject, profileParam.getAccessToken(), new VolleyCallback<String>() {
