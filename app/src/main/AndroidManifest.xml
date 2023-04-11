@@ -25,10 +25,6 @@
             android:exported="false"
             android:theme="@style/Theme.Comment_mb"/>
         <activity
-            android:name=".CommentPostActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Comment_mb"/>
-        <activity
             android:name=".MainFunctionsActivity"
             android:exported="false"
             android:theme="@style/AppTheme.NoActionBar" />

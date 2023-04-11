@@ -2,35 +2,38 @@ package com.example.myapplication.Model;
 
 import androidx.annotation.NonNull;
 
-public class Post {
-    private String date, postDesc, postImageUrl, userEmail,postID, location;
+import java.io.Serializable;
+
+public class Post implements Serializable {
+    private String reviewDate, content, postImageUrl, userEmail, id, roomName, branchName;
 
     public Post() {
     }
 
-    public Post(String date, String postDesc, String postImageUrl, String userEmail, String postID, String location) {
-        this.date = date;
-        this.postDesc = postDesc;
+    public Post(String reviewDate, String postDesc, String postImageUrl, String userEmail, String id, String roomName, String branchName) {
+        this.reviewDate = reviewDate;
+        this.content = postDesc;
         this.postImageUrl = postImageUrl;
         this.userEmail = userEmail;
-        this.postID = postID;
-        this.location = location;
+        this.id = id;
+        this.roomName = roomName;
+        this.branchName = branchName;
     }
 
-    public String getDate() {
-        return date;
+    public String getReviewDate() {
+        return reviewDate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setReviewDate(String reviewDate) {
+        this.reviewDate = reviewDate;
     }
 
-    public String getPostDesc() {
-        return postDesc;
+    public String getContent() {
+        return content;
     }
 
-    public void setPostDesc(String postDesc) {
-        this.postDesc = postDesc;
+    public void setContent(String postDesc) {
+        this.content = postDesc;
     }
 
     public String getPostImageUrl() {
@@ -49,32 +52,40 @@ public class Post {
         this.userEmail = userEmail;
     }
 
-    public String getPostID() {
-        return postID;
+    public String getId() {
+        return id;
     }
 
-    public void setPostID(String postID) {
-        this.postID = postID;
+    public void setId(String id) {
+        this.id = id;
     }
 
     @NonNull
     @Override
     public String toString() {
         return "Post{" +
-                "date='" + date + '\'' +
-                ", postDesc='" + postDesc + '\'' +
+                "date='" + reviewDate + '\'' +
+                ", postDesc='" + content + '\'' +
                 ", postImageUrl='" + postImageUrl + '\'' +
                 ", userEmail='" + userEmail + '\'' +
-                ", postID='" + postID + '\'' +
+                ", postID='" + id + '\'' +
                 '}';
     }
 
-    public String getLocation() {
-        return location;
+    public String getRoomName() {
+        return roomName;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public String getBranchName() {
+        return branchName;
+    }
+
+    public void setBranchName(String branchName) {
+        this.branchName = branchName;
     }
 }
 

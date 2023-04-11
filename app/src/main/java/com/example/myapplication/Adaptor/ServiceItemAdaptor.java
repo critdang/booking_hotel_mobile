@@ -79,6 +79,10 @@ public class ServiceItemAdaptor extends ArrayAdapter<Service> {
             public void onClick(View v) {
                 RequestedService requestedService = new RequestedService(content.getName(),content.getPrice(),"pending");
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
+                if (profile.getCode() == null){
+                    Toast.makeText(getContext(),"Please book rooms before call service",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String code = profile.getCode();
                 DatabaseReference pathRef = database.getReference("/Service_request/"+code+"/"+(new Date()).getTime());
                 pathRef.setValue(requestedService);
