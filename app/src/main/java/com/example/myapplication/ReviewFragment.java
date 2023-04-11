@@ -6,10 +6,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -43,12 +41,15 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.TimeZone;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,13 +61,16 @@ public class ReviewFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "profile";
+    private static final String ARG_PARAM2 = "branch";
+
     private static final ReviewFragment reviewFragmentInstance = new ReviewFragment();
     // TODO: Rename and change types of parameters
     private Profile mParam1;
+    private String mParam2;
     private static final int REQUEST_CODE =101;
     Uri imageUri;
     ImageView addImagePost, sendImagePost;
-    EditText inputPostDesc;
+    EditText inputPostDesc, inputRoom, inputBranch;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
     ProgressDialog mLoadingBar;
@@ -100,9 +104,10 @@ public class ReviewFragment extends Fragment {
         return fragment;
     }
 
-    public static Fragment getInstance(Profile profile) {
+    public static Fragment getInstance(Profile profile, String branch) {
         Bundle args = new Bundle();
         args.putSerializable(ARG_PARAM1, profile);
+        args.putString(ARG_PARAM2, branch);
         reviewFragmentInstance.setArguments(args);
         return reviewFragmentInstance;
     }
@@ -112,6 +117,7 @@ public class ReviewFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = (Profile) getArguments().getSerializable(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -122,11 +128,11 @@ public class ReviewFragment extends Fragment {
         addImagePost = rootView.findViewById(R.id.add_ImagePost);
         sendImagePost = rootView.findViewById(R.id.send_post_imageView);
         inputPostDesc = rootView.findViewById(R.id.inputAddPost);
-
+        inputRoom = rootView.findViewById(R.id.inputRoom);
+        inputBranch = rootView.findViewById(R.id.inputBranch);
         mAuth = FirebaseAuth.getInstance();
         mUser= mAuth.getCurrentUser();
         mUserRef = FirebaseDatabase.getInstance().getReference().child("Users");
-
         postRef = FirebaseDatabase.getInstance().getReference().child("Post");
         postImageRef = FirebaseStorage.getInstance().getReference().child("PostImage");
         likeRef =  FirebaseDatabase.getInstance().getReference().child("Likes");
@@ -134,7 +140,74 @@ public class ReviewFragment extends Fragment {
         mLoadingBar = new ProgressDialog(getContext());
         recyclerView= rootView.findViewById(R.id.recyclerievew);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        inputBranch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<String> branchList = new ArrayList<>();
+                try {
+                    JSONObject jsonObject = new JSONObject(mParam2);
+                    JSONArray jsonArray = jsonObject.getJSONArray("message");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        String branchName = jsonObject1.getString("name");
+                        branchList.add(branchName);
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                PopupMenu popupMenu = new PopupMenu(getContext(), view);
+                popupMenu.getMenuInflater().inflate(R.menu.room_menu, popupMenu.getMenu());
+                for (int i = 0; i < branchList.size(); i++) {
+                    popupMenu.getMenu().add(branchList.get(i));
+                }
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(android.view.MenuItem menuItem) {
+                        inputBranch.setText(menuItem.getTitle());
+                        return true;
+                    }
+                });
+                popupMenu.show();
 
+            }
+        });
+        inputRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<String> roomList = new ArrayList<>();
+                try {
+                    JSONObject jsonObject = new JSONObject(mParam2);
+                    JSONArray jsonArray = jsonObject.getJSONArray("message");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject branch = jsonArray.getJSONObject(i);
+                        String branchName = branch.getString("name");
+                        if (branchName.equals(inputBranch.getText().toString())) {
+                            JSONArray rooms = branch.getJSONArray("rooms");
+                            for (int j = 0; j < rooms.length(); j++) {
+                                String roomName = rooms.getString(j);
+                                roomList.add(roomName);
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                PopupMenu popupMenu = new PopupMenu(getContext(), view);
+                popupMenu.getMenuInflater().inflate(R.menu.room_menu, popupMenu.getMenu());
+                for (int i = 0; i < roomList.size(); i++) {
+                    popupMenu.getMenu().add(roomList.get(i));
+                }
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(android.view.MenuItem menuItem) {
+                        inputRoom.setText(menuItem.getTitle());
+                        return true;
+                    }
+                });
+                popupMenu.show();
+
+            }
+        });
         sendImagePost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -160,12 +233,11 @@ public class ReviewFragment extends Fragment {
 
             @Override
             protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Post model) {
-                String postId = model.getPostID();
-                //                Intent intent = getIntent();
+                String postId = model.getId();
                 String postKey = getRef(position).getKey();
-                holder.postDesc.setText(model.getPostDesc());
-                holder.timeAgo.setText(model.getDate());
-                holder.location.setText(model.getLocation());
+                holder.postDesc.setText(model.getContent());
+                holder.timeAgo.setText(model.getReviewDate());
+                holder.location.setText("At " + model.getBranchName()+ ", " + model.getRoomName());
                 holder.userEmail.setText(model.getUserEmail());
                 Picasso.get().load(model.getPostImageUrl()).into(holder.postImage);
                 holder.countLikes(postKey,mUser.getUid(),likeRef);
@@ -193,7 +265,6 @@ public class ReviewFragment extends Fragment {
                                     notifyDataSetChanged();
                                 }
                             }
-
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
                                 Toast.makeText(getContext(),""+error.getMessage(),Toast.LENGTH_SHORT).show();
@@ -206,7 +277,7 @@ public class ReviewFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(getContext(), PostDetailActivity.class);
-                        intent.putExtra("postID", postId);
+                        intent.putExtra("post", model);
                         startActivity(intent);
 
                     }
@@ -262,16 +333,16 @@ public class ReviewFragment extends Fragment {
                         postImageRef.child(postID).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
-
-
-
                                 HashMap hashMap= new HashMap();
-                                hashMap.put("date",strDate);
+                                hashMap.put("reviewDate",strDate);
                                 hashMap.put("postImageUrl",uri.toString());
-                                hashMap.put("postDesc",postDesc);
+                                hashMap.put("content",postDesc);
                                 hashMap.put("userEmail",userEmail);
-                                hashMap.put("postID", timeStamp);
-                                hashMap.put("location",mParam1.getLocation());
+                                hashMap.put("id", timeStamp);
+                                hashMap.put("roomName",inputRoom.getText().toString());
+                                hashMap.put("branchName",inputBranch.getText().toString());
+                                inputBranch.setText("");
+                                inputRoom.setText("");
                                 //hash map user ID
                                 //hashMap.put("userName",usernameV);
                                 postRef.child(postID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {

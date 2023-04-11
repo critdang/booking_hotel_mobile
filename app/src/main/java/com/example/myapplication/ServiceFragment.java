@@ -80,7 +80,6 @@ public class ServiceFragment extends Fragment {
         AppCompatImageView listButton;
         rootView = inflater.inflate(R.layout.fragment_service, container, false);
         View editView = inflater.inflate(R.layout.fragment_profile_edit,container,true);
-        LinearLayout edit_profile_layout = editView.findViewById(R.id.edit_profile_layout);
         listView = rootView.findViewById(R.id.service_list);
 
         List<Service> initialList = new ArrayList<>();

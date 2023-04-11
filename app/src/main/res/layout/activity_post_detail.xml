@@ -65,10 +65,23 @@
                             android:layout_height="wrap_content"
                             android:text="Post Description"
                             android:textSize="16sp"
+                            android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="@+id/timeAgo"
                             app:layout_constraintHorizontal_bias="0.507"
                             app:layout_constraintStart_toStartOf="@+id/timeAgo"
                             app:layout_constraintTop_toBottomOf="@+id/timeAgo" />
+
+                        <TextView
+                            android:id="@+id/postLocation2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Post Location"
+                            android:textSize="12sp"
+                            android:textStyle="italic"
+                            app:layout_constraintEnd_toEndOf="@+id/postDesc"
+                            app:layout_constraintHorizontal_bias="0.507"
+                            app:layout_constraintStart_toStartOf="@+id/postDesc"
+                            app:layout_constraintTop_toBottomOf="@+id/postDesc" />
 
                         <ImageView
                             android:id="@+id/viewImagePostComment"
@@ -80,7 +93,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.509"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/postDesc"
+                            app:layout_constraintTop_toBottomOf="@+id/postLocation2"
                             app:srcCompat="@drawable/picture" />
 
 

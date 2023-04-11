@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CommentPostActivity"
     android:id="@+id/drawerLayout">
 
 
@@ -28,6 +27,7 @@
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="60dp" />
 
+
         <EditText
             android:id="@+id/inputAddPost"
             android:layout_width="387dp"
@@ -42,8 +42,37 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
-<!--            app:layout_constraintTop_toBottomOf="@+id/app_bar"-->
 
+        <EditText
+            android:id="@+id/inputRoom"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="60dp"
+            android:background="@drawable/input_add_post_bg"
+            android:editable="false"
+            android:hint="Select Room"
+            android:inputType="none"
+            android:paddingLeft="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/inputBranch"
+            app:layout_constraintTop_toBottomOf="@+id/inputAddPost" />
+
+        <EditText
+            android:id="@+id/inputBranch"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/input_add_post_bg"
+            android:editable="false"
+            android:hint="Select Branch"
+            android:inputType="none"
+            android:paddingLeft="50dp"
+            app:layout_constraintEnd_toStartOf="@+id/inputRoom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputAddPost" />
 
         <ImageView
             android:id="@+id/add_ImagePost"
@@ -76,7 +105,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inputAddPost"
+            app:layout_constraintTop_toBottomOf="@+id/inputRoom"
             app:layout_constraintVertical_bias="0.0" />
 
 
