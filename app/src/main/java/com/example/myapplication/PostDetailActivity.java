@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.Model.Comment;
+import com.example.myapplication.Model.Post;
 import com.example.myapplication.ViewHolder.CommentViewHolder;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,8 +41,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PostDetailActivity extends AppCompatActivity {
-    ImageView postImage,likeImage,commentsImage, commentSend;
-    TextView userEmailcm,timeAgo,postDesc,likeCounter,commentCounter;
+    ImageView postImage, commentSend;
+    TextView userEmailcm,timeAgo,postDesc,postLocation;
     EditText inputComments;
     ImageButton sendBtn;
 
@@ -72,14 +73,16 @@ public class PostDetailActivity extends AppCompatActivity {
 
         // get id of post with intnet
         Intent intent = getIntent();
-        postId = intent.getStringExtra("postID");
+        Post post = (Post) intent.getSerializableExtra("post");
+
+        postId = post.getId();
 
         //init view
 
         postImage = findViewById(R.id.viewImagePostComment);
 
         commentSend = findViewById(R.id.sendCommentBtn);
-
+        postLocation = findViewById(R.id.postLocation2);
         userEmailcm = findViewById(R.id.profileUsernamePost);
         timeAgo = findViewById(R.id.timeAgo);
         postDesc = findViewById(R.id.postDesc);
@@ -90,13 +93,9 @@ public class PostDetailActivity extends AppCompatActivity {
         inputComments = findViewById(R.id.inputComments);
         sendBtn = findViewById(R.id.sendCommentBtn);
 
-
         mAuth = FirebaseAuth.getInstance();
         mUser= mAuth.getCurrentUser();
         mUserRef = FirebaseDatabase.getInstance().getReference().child("Users");
-
-
-
         postRef = FirebaseDatabase.getInstance().getReference().child("Post");
         postImageRef = FirebaseStorage.getInstance().getReference().child("PostImage");
         likeRef =  FirebaseDatabase.getInstance().getReference().child("Likes");
@@ -154,21 +153,21 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     private void loadPostInfo() {
-        Query query = postRef.orderByChild("postID").equalTo(postId);
+        Query query = postRef.orderByChild("id").equalTo(postId);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds: snapshot.getChildren()){
                     String uEmail = ""+ds.child("userEmail").getValue();
-                    String pDesc = ""+ds.child("postDesc").getValue();
+                    String reviewDate = ""+ds.child("reviewDate").getValue();
+                    String pDesc = ""+ds.child("content").getValue();
                     String pImage = ""+ds.child("postImageUrl").getValue();
-                    String pID = ""+ds.child("postID").getValue();
-
-
-
+                    String location = "At "+ ds.child("branchName").getValue()+", "+ds.child("roomName").getValue();
                     //set data
                     userEmailcm.setText(uEmail);
                     postDesc.setText(pDesc);
+                    timeAgo.setText(reviewDate);
+                    postLocation.setText(location);
                     Picasso.get().load(pImage).into(postImage);
 
 

@@ -11,7 +11,6 @@ public class Profile implements Serializable {
     private String gender;
     private String accessToken;
     private String code;
-    private String location;
     public String getAvatar() {
         return avatar;
     }
@@ -114,11 +113,4 @@ public class Profile implements Serializable {
         this.code = code;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
 }
