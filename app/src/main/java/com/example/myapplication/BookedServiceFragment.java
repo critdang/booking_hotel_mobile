@@ -92,6 +92,7 @@ public class BookedServiceFragment extends DialogFragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // Get the list of comments from the snapshot
+                requests.clear();
                 int total = 0;
                 for (DataSnapshot commentSnapshot : snapshot.getChildren()) {
                     RequestedService s = commentSnapshot.getValue(RequestedService.class);
