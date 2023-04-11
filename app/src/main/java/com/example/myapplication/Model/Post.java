@@ -3,17 +3,18 @@ package com.example.myapplication.Model;
 import androidx.annotation.NonNull;
 
 public class Post {
-    private String date, postDesc, postImageUrl, userEmail,postID;
+    private String date, postDesc, postImageUrl, userEmail,postID, location;
 
     public Post() {
     }
 
-    public Post(String date, String postDesc, String postImageUrl, String userEmail, String postID) {
+    public Post(String date, String postDesc, String postImageUrl, String userEmail, String postID, String location) {
         this.date = date;
         this.postDesc = postDesc;
         this.postImageUrl = postImageUrl;
         this.userEmail = userEmail;
         this.postID = postID;
+        this.location = location;
     }
 
     public String getDate() {
@@ -66,6 +67,14 @@ public class Post {
                 ", userEmail='" + userEmail + '\'' +
                 ", postID='" + postID + '\'' +
                 '}';
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }
 
