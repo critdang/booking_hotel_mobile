@@ -24,7 +24,7 @@ import java.util.List;
 
 public class MyViewHolder extends RecyclerView.ViewHolder {
     public ImageView postImage,likeImage,commentsImage, commentSend;
-    public TextView userEmail,timeAgo,postDesc,likeCounter,commentCounter;
+    public TextView userEmail,timeAgo,postDesc,likeCounter,commentCounter, location;
     public EditText inputCommets;
     public ImageButton moreBtn;
     public Context context;
@@ -43,6 +43,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         postImage = itemView.findViewById(R.id.viewImagePost);
         userEmail = itemView.findViewById(R.id.profileUsernamePost);
+        location = itemView.findViewById(R.id.postLocation);
         timeAgo= itemView.findViewById(R.id.timeAgo);
         postDesc= itemView.findViewById(R.id.postDesc);
         likeImage= itemView.findViewById(R.id.likeImage);
@@ -53,7 +54,6 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
         inputCommets = itemView.findViewById(R.id.inputComments);
         recyclerView = itemView.findViewById(R.id.recyclerievew);
         moreBtn = itemView.findViewById(R.id.moreBtn);
-
 
     }
 

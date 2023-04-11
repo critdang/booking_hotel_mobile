@@ -9,10 +9,12 @@ import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Model.Post;
+import com.example.myapplication.Model.Profile;
 import com.example.myapplication.ViewHolder.MyViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -56,12 +59,10 @@ public class ReviewFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
+    private static final String ARG_PARAM1 = "profile";
+    private static final ReviewFragment reviewFragmentInstance = new ReviewFragment();
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Profile mParam1;
     private static final int REQUEST_CODE =101;
     Uri imageUri;
     ImageView addImagePost, sendImagePost;
@@ -94,18 +95,23 @@ public class ReviewFragment extends Fragment {
     public static ReviewFragment newInstance(String param1, String param2) {
         ReviewFragment fragment = new ReviewFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+//        args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public static Fragment getInstance(Profile profile) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_PARAM1, profile);
+        reviewFragmentInstance.setArguments(args);
+        return reviewFragmentInstance;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam1 = (Profile) getArguments().getSerializable(ARG_PARAM1);
         }
     }
 
@@ -159,8 +165,7 @@ public class ReviewFragment extends Fragment {
                 String postKey = getRef(position).getKey();
                 holder.postDesc.setText(model.getPostDesc());
                 holder.timeAgo.setText(model.getDate());
-                String timeAgo = calculateTimeago(model.getDate());
-                holder.timeAgo.setText(timeAgo);
+                holder.location.setText(model.getLocation());
                 holder.userEmail.setText(model.getUserEmail());
                 Picasso.get().load(model.getPostImageUrl()).into(holder.postImage);
                 holder.countLikes(postKey,mUser.getUid(),likeRef);
@@ -168,12 +173,8 @@ public class ReviewFragment extends Fragment {
                 holder.moreBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                     }
                 });
-
-
-
                 holder.likeImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -210,9 +211,7 @@ public class ReviewFragment extends Fragment {
 
                     }
                 });
-
             }
-
             @NonNull
             @Override
             public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -224,25 +223,6 @@ public class ReviewFragment extends Fragment {
         adapter.startListening();
         recyclerView.setAdapter(adapter);
     }
-
-
-
-
-    private String calculateTimeago(String date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        try {
-            long time = sdf.parse(date).getTime();
-            long now = System.currentTimeMillis();
-            CharSequence ago =
-                    DateUtils.getRelativeTimeSpanString(time, now, DateUtils.MINUTE_IN_MILLIS);
-            return  ago+"";
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable  Intent data){
         super.onActivityResult(requestCode,resultCode,data);
@@ -264,11 +244,8 @@ public class ReviewFragment extends Fragment {
             mLoadingBar.setTitle("Adding Post");
             mLoadingBar.setCanceledOnTouchOutside(false);
             mLoadingBar.show();
-
-
-
             Date date = new Date();
-            SimpleDateFormat formatter =  new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+            SimpleDateFormat formatter =  new SimpleDateFormat("dd-MM-yyyy hh:mm a");
             String strDate = formatter.format(date);
             //get user email
             String userEmail = mUser.getEmail();
@@ -294,6 +271,7 @@ public class ReviewFragment extends Fragment {
                                 hashMap.put("postDesc",postDesc);
                                 hashMap.put("userEmail",userEmail);
                                 hashMap.put("postID", timeStamp);
+                                hashMap.put("location",mParam1.getLocation());
                                 //hash map user ID
                                 //hashMap.put("userName",usernameV);
                                 postRef.child(postID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
