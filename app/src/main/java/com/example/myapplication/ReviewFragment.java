@@ -265,7 +265,8 @@ public class ReviewFragment extends Fragment {
                                     notifyDataSetChanged();
                                 }
                                 else {
-                                    likeRef.child(postKey).child(mUser.getUid()).setValue("like");
+                                    likeRef.child(postKey).child(mUser.getUid()).setValue(mUser.getEmail());
+                                    likeRef.child(postKey).child("id").setValue(postKey);
                                     holder.likeImage.setColorFilter(Color.BLUE);
                                     notifyDataSetChanged();
                                 }

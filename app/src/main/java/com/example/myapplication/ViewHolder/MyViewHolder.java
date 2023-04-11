@@ -64,7 +64,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
                 if (snapshot.exists())
                 {
                     int totalLikes= (int) snapshot.getChildrenCount();
-                    likeCounter.setText(totalLikes+"");
+                    likeCounter.setText((totalLikes-1)+"");
                 }
                 else {
                     likeCounter.setText("0");
