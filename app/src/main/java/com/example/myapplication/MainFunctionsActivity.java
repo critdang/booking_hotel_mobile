@@ -42,12 +42,13 @@ public class MainFunctionsActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Profile profile = (Profile) getIntent().getSerializableExtra("profile");
+                String branch = getIntent().getStringExtra("branch");
                 switch (item.getItemId()) {
                     case R.id.service_menu_item:
                         replaceFragment(ServiceFragment.getInstance(profile));
                         return true;
                     case R.id.review_menu_item:
-                        replaceFragment(new ReviewFragment());
+                        replaceFragment(ReviewFragment.getInstance(profile, branch));
                         return true;
                     case R.id.profile_menu_item:
                         replaceFragment(ProfileFragment.getInstance(profile));

@@ -15,6 +15,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Utils.RequestInvoker;
 import com.example.myapplication.Utils.VolleyCallback;
@@ -129,12 +133,22 @@ public class FragmentLogin extends Fragment {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful())
                 {
-                    mLoadingBar.dismiss();
-                    Toast.makeText(getContext(), "Login is Successful", Toast.LENGTH_SHORT).show();
-                    Intent intent= new Intent(getContext(),MainFunctionsActivity.class);
-                    intent.putExtra("profile", result);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                    String url = getContext().getString(R.string.server_host_address)+"/room/branch";
+                    StringRequest stringRequest = new StringRequest(Request.Method.GET, url, response -> {
+                        mLoadingBar.dismiss();
+                        Toast.makeText(getContext(), "Login is Successful", Toast.LENGTH_SHORT).show();
+                        Intent intent= new Intent(getContext(),MainFunctionsActivity.class);
+                        intent.putExtra("profile", result);
+                        intent.putExtra("branch", response);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }, error -> {
+                        mLoadingBar.dismiss();
+                        Toast.makeText(getContext(), "Connect database fail", Toast.LENGTH_SHORT).show();
+                    });
+                    RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+                    requestQueue.add(stringRequest);
+
                 }
                 else {
                     mLoadingBar.dismiss();

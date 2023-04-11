@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.airbnb.lottie.L;
 import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
 import com.example.myapplication.Adaptor.ServiceItemAdaptor;
 import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.Service;
@@ -79,7 +80,6 @@ public class ServiceFragment extends Fragment {
         AppCompatImageView listButton;
         rootView = inflater.inflate(R.layout.fragment_service, container, false);
         View editView = inflater.inflate(R.layout.fragment_profile_edit,container,true);
-        LinearLayout edit_profile_layout = editView.findViewById(R.id.edit_profile_layout);
         listView = rootView.findViewById(R.id.service_list);
 
         List<Service> initialList = new ArrayList<>();
@@ -100,7 +100,6 @@ public class ServiceFragment extends Fragment {
                 serviceList.addAll(result);
                 filterList.addAll(result);
                 ServiceItemAdaptor adaptor = new ServiceItemAdaptor(getActivity(), R.layout.service_item_adaptor, initialList);
-                Log.i("prosssssssssssssss", mParam1.toString());
                 adaptor.setProfile(mParam1);
                 listView.setAdapter(adaptor);
             }
@@ -131,9 +130,6 @@ public class ServiceFragment extends Fragment {
                 return false;
             }
         });
-        // This is to make the search view expand without clicking on search icon
-//        searchView.setIconifiedByDefault(false);
-//        searchView.setQueryHint("Search here");
         searchView.setOnCloseListener(() -> {
             serviceList.addAll(initialList);
             ServiceItemAdaptor adaptor = new ServiceItemAdaptor(getActivity(), R.layout.service_item_adaptor, serviceList);
@@ -142,8 +138,6 @@ public class ServiceFragment extends Fragment {
         });
 
         listButton.setOnClickListener(v -> {
-//            rootView.setVisibility(View.GONE);
-//            edit_profile_layout.setVisibility(View.VISIBLE);
             FragmentManager fm = getParentFragmentManager();
             BookedServiceFragment dialog = BookedServiceFragment.newInstance(mParam1);
             dialog.show(fm, "requested_service");

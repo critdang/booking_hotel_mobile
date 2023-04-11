@@ -11,6 +11,7 @@ public class Profile implements Serializable {
     private String gender;
     private String accessToken;
     private String code;
+
     public String getAvatar() {
         return avatar;
     }
@@ -111,4 +112,5 @@ public class Profile implements Serializable {
     public void setCode(String code) {
         this.code = code;
     }
+
 }
