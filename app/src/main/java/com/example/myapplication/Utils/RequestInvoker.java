@@ -117,8 +117,11 @@ public class RequestInvoker {
                                 String gender = data.getString("gender");
                                 String avatar = data.getString("avatar");
                                 String code = data.getString("code");
+                                String room = data.getString("room");
+                                String branch = data.getString("branch");
+                                String location = "At "+branch+" branch, room "+room;
                                 String accessToken = jsonResponse.getJSONObject("message").getString("accessToken");
-                                Profile profile = new Profile(1, name, email, phone, address, gender, accessToken, code, avatar);
+                                Profile profile = new Profile(1, name, email, phone, address, gender, accessToken, code, location, avatar);
 
                                 callback.onSuccess(profile);
                             }

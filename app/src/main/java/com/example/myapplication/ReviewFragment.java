@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -67,6 +68,7 @@ public class ReviewFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private Profile mParam1;
     private String mParam2;
+
     private static final int REQUEST_CODE =101;
     Uri imageUri;
     ImageView addImagePost, sendImagePost;
@@ -108,6 +110,7 @@ public class ReviewFragment extends Fragment {
         Bundle args = new Bundle();
         args.putSerializable(ARG_PARAM1, profile);
         args.putString(ARG_PARAM2, branch);
+
         reviewFragmentInstance.setArguments(args);
         return reviewFragmentInstance;
     }
@@ -118,6 +121,7 @@ public class ReviewFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = (Profile) getArguments().getSerializable(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -238,6 +242,7 @@ public class ReviewFragment extends Fragment {
                 holder.postDesc.setText(model.getContent());
                 holder.timeAgo.setText(model.getReviewDate());
                 holder.location.setText("At " + model.getBranchName()+ ", " + model.getRoomName());
+
                 holder.userEmail.setText(model.getUserEmail());
                 Picasso.get().load(model.getPostImageUrl()).into(holder.postImage);
                 holder.countLikes(postKey,mUser.getUid(),likeRef);
@@ -343,6 +348,7 @@ public class ReviewFragment extends Fragment {
                                 hashMap.put("branchName",inputBranch.getText().toString());
                                 inputBranch.setText("");
                                 inputRoom.setText("");
+
                                 //hash map user ID
                                 //hashMap.put("userName",usernameV);
                                 postRef.child(postID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {

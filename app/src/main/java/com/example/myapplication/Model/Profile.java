@@ -11,7 +11,6 @@ public class Profile implements Serializable {
     private String gender;
     private String accessToken;
     private String code;
-
     public String getAvatar() {
         return avatar;
     }
@@ -69,7 +68,7 @@ public class Profile implements Serializable {
         this.gender = gender;
     }
 
-    public Profile(int id, String name, String email, String phone, String address, String gender, String accessToken, String code, String avatar) {
+    public Profile(int id, String name, String email, String phone, String address, String gender, String accessToken, String code, String location, String avatar) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -78,6 +77,7 @@ public class Profile implements Serializable {
         this.gender = gender;
         this.accessToken = accessToken;
         this.code = code;
+        this.location = location;
         this.avatar = avatar;
     }
     public Profile() {

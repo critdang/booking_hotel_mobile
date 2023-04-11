@@ -7,6 +7,7 @@ import java.io.Serializable;
 public class Post implements Serializable {
     private String reviewDate, content, postImageUrl, userEmail, id, roomName, branchName;
 
+
     public Post() {
     }
 
@@ -18,6 +19,7 @@ public class Post implements Serializable {
         this.id = id;
         this.roomName = roomName;
         this.branchName = branchName;
+
     }
 
     public String getReviewDate() {
@@ -86,6 +88,7 @@ public class Post implements Serializable {
 
     public void setBranchName(String branchName) {
         this.branchName = branchName;
+
     }
 }
 

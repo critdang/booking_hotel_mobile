@@ -49,6 +49,7 @@ public class MainFunctionsActivity extends AppCompatActivity {
                         return true;
                     case R.id.review_menu_item:
                         replaceFragment(ReviewFragment.getInstance(profile, branch));
+
                         return true;
                     case R.id.profile_menu_item:
                         replaceFragment(ProfileFragment.getInstance(profile));
