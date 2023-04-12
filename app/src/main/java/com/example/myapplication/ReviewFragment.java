@@ -260,11 +260,17 @@ public class ReviewFragment extends Fragment {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if(snapshot.exists())
                                 {
+                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Post").child(postId).child("Like");
+                                    ref.child(mUser.getUid()).removeValue();
+
                                     likeRef.child(postKey).child(mUser.getUid()).removeValue();
                                     holder.likeImage.setColorFilter(Color.GRAY);
                                     notifyDataSetChanged();
                                 }
                                 else {
+                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Post").child(postId).child("Like");
+                                    ref.child(mUser.getUid()).setValue(mUser.getEmail());
+
                                     likeRef.child(postKey).child(mUser.getUid()).setValue(mUser.getEmail());
                                     likeRef.child(postKey).child("id").setValue(postKey);
                                     holder.likeImage.setColorFilter(Color.BLUE);

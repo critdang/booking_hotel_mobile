@@ -19,19 +19,20 @@
                 android:title=">1000" />
         </menu>
     </item>
-    <item android:title="Rating">
-        android:id="@+id/filter_name"
-        android:title="Name"
-        <menu>
-            <item
-                android:id="@+id/filter_rating_increasing"
-                android:title="Rating ↑" />
-            <item
-                android:id="@+id/filter_rating_decreasing"
-                android:title="Rating ↓" />
-        </menu>
-    </item>
+<!--    <item android:title="Rating">-->
+<!--        android:id="@+id/filter_name"-->
+<!--        android:title="Name"-->
+<!--        <menu>-->
+<!--            <item-->
+<!--                android:id="@+id/filter_rating_increasing"-->
+<!--                android:title="Rating ↑" />-->
+<!--            <item-->
+<!--                android:id="@+id/filter_rating_decreasing"-->
+<!--                android:title="Rating ↓" />-->
+<!--        </menu>-->
+<!--    </item>-->
     <item
         android:id="@+id/filter_clear"
-        android:title="Reset Filter" />
+        android:title="Reset Filter"
+        />
 </menu>
