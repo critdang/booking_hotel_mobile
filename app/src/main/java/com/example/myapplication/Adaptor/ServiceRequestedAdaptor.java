@@ -55,17 +55,25 @@ public class ServiceRequestedAdaptor extends ArrayAdapter<RequestedService> {
             cellView = LayoutInflater.from(getContext()).inflate(this.layout, parent, false);
 
         final RequestedService content = contentList.get(position);
-        String name = (position+1) +". " + content.getName();
-        String price = "Price: "+ content.getPrice()+ "$";
-        String status = "Status: "+ content.getStatus();
+        String name = content.getName();
+        String price = content.getPrice()+ "$";
+        String status = content.getStatus();
         TextView serviceName = cellView.findViewById(R.id.requested_service_name_text);
         serviceName.setText(name);
         TextView servicePrice = cellView.findViewById(R.id.requested_service_price_text);
         servicePrice.setText(price);
-        TextView serviceCount = cellView.findViewById(R.id.requested_service_count_text);
-        serviceCount.setText("");
         TextView serviceStatus = cellView.findViewById(R.id.requested_service_status_text);
         serviceStatus.setText(status);
+        if (status.equalsIgnoreCase("Pending")) {
+            serviceStatus.setBackgroundResource(R.drawable.pending_border);
+            serviceStatus.setTextColor(R.color.yellow);
+        } else if (status.equalsIgnoreCase("Accepted")) {
+            serviceStatus.setBackgroundResource(R.drawable.accepted_border);
+            serviceStatus.setTextColor(R.color.green);
+        } else {
+            serviceStatus.setBackgroundResource(R.drawable.rejected_border);
+            serviceStatus.setTextColor(R.color.red);
+        }
         return cellView;
     }
 }

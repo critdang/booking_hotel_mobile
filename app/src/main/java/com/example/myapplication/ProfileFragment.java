@@ -1,9 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +16,6 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import com.android.volley.Request;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.Transformation;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Utils.RequestInvoker;
 import com.example.myapplication.Utils.VolleyCallback;
@@ -48,10 +41,11 @@ public class ProfileFragment extends Fragment {
     private LinearLayout edit_profile_layout;
     private RadioGroup genderRadioGroup;
     private RadioButton maleRadioButton, femaleRadioButton, otherRadioButton;
-    private Button editButton, saveButton, cancelButton, logoutButton;
+    private Button saveButton, cancelButton, logoutButton;
     private TextView fullNameTextView, addressTextView, genderTextView, phoneTextView;
     private EditText fullNameEditText, addressEditText, phoneEditText;
-    private ImageView avatarImageView;
+    private ImageView avatarImageView,editButton;
+
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -114,7 +108,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
 //              Navigate to login screen
-                Intent intent = new Intent(getActivity(), MainActivity.class);
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
             }
         });

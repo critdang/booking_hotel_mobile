@@ -97,7 +97,8 @@ public class BookedServiceFragment extends DialogFragment {
                 for (DataSnapshot commentSnapshot : snapshot.getChildren()) {
                     RequestedService s = commentSnapshot.getValue(RequestedService.class);
                     requests.add(s);
-                    total += s.getPrice();
+                    if (s.getStatus().equalsIgnoreCase("Accepted"))
+                        total += s.getPrice();
                 }
                 total_text.setText("TOTAL: " + total + "$");
                 // Update the RecyclerView adapter with the new comments

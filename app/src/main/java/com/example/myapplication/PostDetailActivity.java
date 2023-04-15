@@ -48,7 +48,8 @@ public class PostDetailActivity extends AppCompatActivity {
 
     ProgressDialog pd;
 
-    String postId, uEmail, pLikes, pDesc, pImg;
+    String postId;
+
     RecyclerView recyclerView;
 
     FirebaseAuth mAuth;

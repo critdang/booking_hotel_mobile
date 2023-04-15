@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -128,7 +127,7 @@ public class ReviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_comment_post, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_review, container, false);
         addImagePost = rootView.findViewById(R.id.add_ImagePost);
         sendImagePost = rootView.findViewById(R.id.send_post_imageView);
         inputPostDesc = rootView.findViewById(R.id.inputAddPost);
@@ -178,6 +177,10 @@ public class ReviewFragment extends Fragment {
         inputRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (inputBranch.getText().toString().equals("")) {
+                    Toast.makeText(getContext(), "Please select branch first", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 List<String> roomList = new ArrayList<>();
                 try {
                     JSONObject jsonObject = new JSONObject(mParam2);
@@ -298,7 +301,7 @@ public class ReviewFragment extends Fragment {
             @NonNull
             @Override
             public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from((parent.getContext())).inflate(R.layout.single_view_post,parent,false);
+                View view = LayoutInflater.from((parent.getContext())).inflate(R.layout.single_view_post_adaptor,parent,false);
                 return new MyViewHolder(view);
 
             }
@@ -322,6 +325,12 @@ public class ReviewFragment extends Fragment {
         }
         else if(imageUri==null){
             Toast.makeText(getContext(),"please select an image", Toast.LENGTH_SHORT).show();
+        }
+        else if(inputRoom.getText().toString().isEmpty()){
+            Toast.makeText(getContext(),"please select a room", Toast.LENGTH_SHORT).show();
+        }
+        else if(inputBranch.getText().toString().isEmpty()){
+            Toast.makeText(getContext(),"please select a branch", Toast.LENGTH_SHORT).show();
         }
         else{
             mLoadingBar.setTitle("Adding Post");

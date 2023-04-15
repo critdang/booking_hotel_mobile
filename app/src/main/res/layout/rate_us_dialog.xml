@@ -18,7 +18,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:background="@color/dialog_color_1"/>
+                android:background="@color/blue"/>
 
             <RelativeLayout
                 android:layout_width="150dp"
@@ -40,7 +40,7 @@
                     android:layout_centerInParent="true"
                     android:adjustViewBounds="true"
                     android:padding="25dp"
-                    android:src="@drawable/rate_buon" />
+                    android:src="@drawable/rate_tuyetvoi" />
 
             </RelativeLayout>
 
@@ -53,6 +53,16 @@
                 android:textSize="25sp"
                 android:textStyle="bold"
                 android:layout_gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp"
+                android:text="Thank you"/>
 
             <androidx.appcompat.widget.AppCompatRatingBar
                 android:id="@+id/ratingBar"
@@ -81,13 +91,12 @@
                     android:id="@+id/laterBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:background="@drawable/round_back_brown_6"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
                     android:text="May be, later"
                     android:textAllCaps="false"
-                    android:textColor="#CC000000" />
-
+                    android:textColor="#CC000000"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:background="@drawable/round_back_brown_6"/>
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/rateNowBtn"
                     android:layout_marginStart="20dp"
@@ -95,10 +104,11 @@
                     android:layout_height="40dp"
                     android:text="Rate Now"
                     android:textAllCaps="false"
-                    android:textColor="#CC000000"
+                    android:textColor="@color/white"
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
-                    android:background="@drawable/round_back_brown_6"/>
+                    android:backgroundTint="@color/blue"
+                    android:background="@drawable/custom_button_border"/>
 
             </LinearLayout>
 
