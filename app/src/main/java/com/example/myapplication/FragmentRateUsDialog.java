@@ -24,7 +24,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.myapplication.Model.Profile;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +42,7 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -61,12 +64,15 @@ public class FragmentRateUsDialog extends DialogFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private float userRate =0;
+    private float userRate = 0;
     private String accessToken;
+    private Profile profile;
     public FragmentRateUsDialog() {
         // Required empty public constructor
     }
-
+    public FragmentRateUsDialog(Profile profile) {
+        this.profile = profile;
+    }
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -98,7 +104,7 @@ public class FragmentRateUsDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        View view = getActivity().getLayoutInflater().inflate(R.layout.activity_rate_us_dialog, null);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.rate_us_dialog, null);
 
         final AppCompatButton rateButton = view.findViewById(R.id.rateNowBtn);
         final AppCompatButton laterBtn = view.findViewById(R.id.laterBtn);
@@ -110,7 +116,7 @@ public class FragmentRateUsDialog extends DialogFragment {
                 int roomBooking_id = 1;
                 int rate = (int) userRate;
                 Date date = new Date();
-                Rating(roomBooking_id,rate,date);
+                Rating(roomBooking_id, rate, date);
             }
         });
         laterBtn.setOnClickListener(new View.OnClickListener() {
@@ -144,8 +150,8 @@ public class FragmentRateUsDialog extends DialogFragment {
         return builder.create();
     }
 
-    private void animateImage(ImageView ratingImage){
-        ScaleAnimation scaleAnimation = new ScaleAnimation(0,1f,0,1f, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+    private void animateImage(ImageView ratingImage) {
+        ScaleAnimation scaleAnimation = new ScaleAnimation(0, 1f, 0, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
 
         scaleAnimation.setFillAfter(true);
         scaleAnimation.setDuration(200);
@@ -153,8 +159,7 @@ public class FragmentRateUsDialog extends DialogFragment {
     }
 
 
-
-    private void Rating(int roomBooking_id,  int rate, Date date){
+    private void Rating(int roomBooking_id, int rate, Date date) {
         String url = "http://10.0.2.2:8080/user/rating";
         Log.i("Rate", "Rating button clicked");
 
@@ -176,7 +181,6 @@ public class FragmentRateUsDialog extends DialogFragment {
             e.printStackTrace();
         }
 
-
 //      Get accessToken  from internal storage
         try {
             JSONObject jsonObject = new JSONObject(fileContents);
@@ -194,9 +198,9 @@ public class FragmentRateUsDialog extends DialogFragment {
 //      Create JSON object & Add information to req.Body
         JSONObject jsonBody = new JSONObject();
         try {
-            jsonBody.put("roomBooking_id", roomBooking_id);
+            jsonBody.put("roomBookingId", roomBooking_id);
             jsonBody.put("rate", rate);
-            jsonBody.put("date", formattedDate);
+            jsonBody.put("ratingDate", formattedDate);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -209,19 +213,19 @@ public class FragmentRateUsDialog extends DialogFragment {
         HttpCookie cookie = new HttpCookie("accessToken", accessToken);
         cookieManager.getCookieStore().add(uri, cookie);
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
-                new Response.Listener<JSONObject>() {
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(String response) {
                         // handle the response from the API here
                         try {
+                            JSONObject responseObj = new JSONObject(response);
                             Log.i("response", response.toString());
-                            // Extract "message" string from JSONObject
-                            String message = response.getString("message");
-                            String success = response.getString("success");
+                            String message = responseObj.getString("message");
+                            String success = responseObj.getString("success");
                             Log.i("Login", "API response message: " + message);
                             dismiss();
-                            Toast.makeText(getActivity().getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             Log.e("response", "Error parsing JSON response: " + e.getMessage());
                             throw new RuntimeException(e);
@@ -237,6 +241,7 @@ public class FragmentRateUsDialog extends DialogFragment {
                         if (error.networkResponse != null && error.networkResponse.data != null) {
                             try {
                                 String errorResponse = new String(error.networkResponse.data, "UTF-8");
+                                Log.i("errorResponse", errorResponse);
                                 JSONObject errorObject = new JSONObject(errorResponse);
                                 errorMessage = errorObject.getString("message");
                                 //show error message in a Toast
@@ -252,22 +257,40 @@ public class FragmentRateUsDialog extends DialogFragment {
                         }
 
                     }
-//                    Add to cookie
+                }) {
+                    // Add to cookie
+                    @Override
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         Map<String, String> headers = new HashMap<>();
-                        // Set the cookie header
-                        List<HttpCookie> cookies = cookieManager.getCookieStore().get(uri);
-                        if (cookies != null) {
-                            String cookieHeader = cookies.stream()
-                                    .map(HttpCookie::toString)
-                                    .collect(Collectors.joining(";"));
-                            headers.put("Cookie", cookieHeader);
-                        }
+//                        List<HttpCookie> cookies = cookieManager.getCookieStore().get(uri);
+//                        if (cookies != null) {
+//                            String cookieHeader = cookies.stream()
+//                                    .map(HttpCookie::toString)
+//                                    .collect(Collectors.joining(";"));
+//                            headers.put("Cookie", cookieHeader);
+//                        }
+                        headers.put("Cookie", "accessToken=" + profile.getAccessToken());
                         return headers;
                     }
-                });
 
-        // Add the request to the RequestQueue.
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                Iterator<String> keys = jsonBody.keys();
+                try {
+                    while (keys.hasNext()) {
+                        String key = keys.next();
+                        String value = null;
+                        value = jsonBody.getString(key);
+                        params.put(key, value);
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                return params;
+            }
+        };
         RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
         queue.add(request);
     }
