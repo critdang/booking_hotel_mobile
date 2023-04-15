@@ -10,9 +10,14 @@
     <color name="colorPrimary">#00796b</color>
     <color name="colorPrimaryDark">#00695C</color>
     <color name="colorAccent">#FF4081</color>
-
+    <color name="purple">#8692f7</color>
+    <color name="blue">#007afe</color>
+    <color name="red">#f83725</color>
+    <color name="green">#2af441</color>
+    <color name="yellow">#FDD736</color>
     <color name="dialog_color_1">#FDD736</color>
     <color name="dialog_color_2">#3B5796</color>
     <color name="tool_bar_comment">#007aff</color>
     <color name="input_add_post_bg">#B2BEB5</color>
+    <color name="lavender">#8692f7</color>
 </resources>

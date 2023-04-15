@@ -85,7 +85,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/postLocation"
-                app:srcCompat="@drawable/picture" />
+                app:srcCompat="@drawable/buffet" />
 
             <ImageView
                 android:id="@+id/likeImage"

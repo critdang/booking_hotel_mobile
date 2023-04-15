@@ -27,17 +27,18 @@ import java.util.List;
 public class MainFunctionsActivity extends AppCompatActivity {
     ActivityMainFunctionsBinding binding;
     List<Service> services;
-
+    Profile profile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_functions);
         binding = ActivityMainFunctionsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Profile profile = (Profile) getIntent().getSerializableExtra("profile");
+        profile = (Profile) getIntent().getSerializableExtra("profile");
         replaceFragment(ServiceFragment.getInstance(profile));
         BottomNavigationView bottom_navigation_bar = findViewById(R.id.bottom_navbar);
         setAlarm();
+
         bottom_navigation_bar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -45,12 +46,16 @@ public class MainFunctionsActivity extends AppCompatActivity {
                 String branch = getIntent().getStringExtra("branch");
                 switch (item.getItemId()) {
                     case R.id.service_menu_item:
+                        item.setChecked(true);
+                        // set the item color to red
                         replaceFragment(ServiceFragment.getInstance(profile));
                         return true;
                     case R.id.review_menu_item:
+                        item.setChecked(true);
                         replaceFragment(ReviewFragment.getInstance(profile, branch));
                         return true;
                     case R.id.profile_menu_item:
+                        item.setChecked(true);
                         replaceFragment(ProfileFragment.getInstance(profile));
                         return true;
                     default:
@@ -113,7 +118,7 @@ public class MainFunctionsActivity extends AppCompatActivity {
     public void showRateUsDialog() {
         Log.d("MainFunctionsActivity", "showRateUsDialog() called at" + new Date());
         FragmentManager fm = getSupportFragmentManager();
-        FragmentRateUsDialog dialog = new FragmentRateUsDialog();
+        FragmentRateUsDialog dialog = new FragmentRateUsDialog(profile);
         dialog.show(fm, "rate_us_dialog");
     }
 }

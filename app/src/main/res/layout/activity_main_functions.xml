@@ -25,19 +25,18 @@
         android:id="@+id/bottom_navbar"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:background="#007aff"
+        android:background="@color/white"
         android:textAlignment="center"
         android:textDirection="firstStrongLtr"
         app:elevation="0dp"
         app:itemHorizontalTranslationEnabled="false"
-        app:itemIconTint="@color/white"
-        app:itemPaddingTop="-8dp"
-        app:itemTextColor="#FFFFFF"
-        app:labelVisibilityMode="unlabeled"
+        app:itemIconTint="@color/blue"
+        app:itemTextColor="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/frameLayout"
-        app:menu="@menu/bottom_navbar" />
+        app:menu="@menu/bottom_navbar"
+        style="@style/CustomBottomNavigationView"/>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
