@@ -94,7 +94,7 @@
                             app:layout_constraintHorizontal_bias="0.509"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/postLocation2"
-                            app:srcCompat="@drawable/picture" />
+                            app:srcCompat="@drawable/buffet" />
 
 
                         <ImageButton

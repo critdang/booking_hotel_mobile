@@ -10,45 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:layout_weight="1"
-            android:letterSpacing="0.03"
-            android:paddingTop="10dp"
-            android:text="Services Request"
-            android:textAlignment="center"
-            android:textColor="#007aff"
-            android:textSize="24sp"
-            android:textStyle="bold|italic"
-            app:layout_constraintBottom_toTopOf="@+id/search_cart"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/list_service_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/list_btn"
-            tools:layout_editor_absoluteX="350dp"
-            tools:layout_editor_absoluteY="39dp"
-            app:layout_constraintBottom_toTopOf="@+id/search_cart"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
         <LinearLayout
             android:id="@+id/search_cart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_title">
+            app:layout_constraintTop_toTopOf="parent">
 
             <SearchView
                 android:id="@+id/search_view"
@@ -61,15 +32,11 @@
                 android:id="@+id/button_sort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:backgroundTint="#007AFE"
+                android:drawableLeft="@drawable/baseline_sort_24"
                 android:text="Sort"
                 android:textAllCaps="false"
-                android:textColor="#FFFFFF"
-                app:icon="@android:drawable/ic_menu_sort_by_size"
-                app:iconPadding="0dp"
-                app:iconSize="20dp"
-                app:iconTint="#FFFFFF" />
+                android:textColor="#FFFFFF" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -77,17 +44,15 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/button_filter"
+                android:id="@+id/button_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/custom_button_border"
                 android:backgroundTint="#FFFFFF"
-                android:text="Filter"
+                android:drawableLeft="@drawable/list_btn"
+                android:text="List"
                 android:textAllCaps="false"
-                android:textColor="#007AFE"
-                app:icon="@drawable/ic_filter"
-                app:iconSize="20dp"
-                app:strokeColor="#007AFE"
-                app:strokeWidth="2dp" />
+                android:textColor="#007AFE" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -125,8 +90,13 @@
                 <ListView
                     android:id="@+id/service_list"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.2" />
+                    android:layout_height="504dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_weight="0.2"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="10.0sp"
+                    android:scrollbars="vertical"
+                    tools:listitem="@layout/service_item_adaptor" />
 
             </LinearLayout>
 
